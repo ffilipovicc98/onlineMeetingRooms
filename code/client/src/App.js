@@ -1,11 +1,5 @@
 import './App.css';
-import {
-    Switch,
-    Route,
-    Redirect,
-    useHistory,
-    useLocation,
-} from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import JoinPage from './components/JoinPage/JoinPage';
 import RoomPage from './components/RoomPage/RoomPage';
@@ -19,21 +13,35 @@ const springType = {
     restDelta: 0.005,
 };
 
+const shouldRedirectToHomePage = (currentUserLocation) => {
+    const isUserComingToJoinPage = currentUserLocation.pathname === '/join';
+    const isUserComingFromPageWhichDidntSetStateRoomName =
+        currentUserLocation.state === undefined ||
+        currentUserLocation.state.roomName === undefined ||
+        (currentUserLocation.state.roomName !== undefined &&
+            currentUserLocation.state.roomName === '');
+    // TODO isRoomAvailibaleOnTheServer
+    return (
+        isUserComingToJoinPage && isUserComingFromPageWhichDidntSetStateRoomName
+        /*&& isRoomAvailibaleOnTheServer */
+    );
+};
+
+const shouldRedirectToJoinPage = (currentUserLocation) => {
+    const isUserComingToRoomPage =
+        currentUserLocation.pathname.split('/')[1] === 'rooms';
+    const isUserComingFromPageWhichDidntSetStateRoomName =
+        currentUserLocation.state === undefined ||
+        currentUserLocation.state.roomName === undefined;
+
+    return (
+        isUserComingToRoomPage && isUserComingFromPageWhichDidntSetStateRoomName
+    );
+};
+
 const App = () => {
-    const history = useHistory();
     const location = useLocation();
-    const uslov1 =
-        location.pathname === '/join' &&
-        (location.state === undefined ||
-            location.state.previousPage !== 'home');
-    const uslov2 =
-        location.pathname === '/room' &&
-        (location.state === undefined ||
-            location.state.previousPage !== 'join');
-    let shoudRedirectToHomePage = false;
-    if (uslov1 || uslov2) {
-        shoudRedirectToHomePage = true;
-    }
+
     const variantsForAnimatingPages = {
         initialState: {
             x: '100vw',
@@ -48,6 +56,8 @@ const App = () => {
             transition: springType,
         },
     };
+
+    // if HomePage is loading for the first time
     if (location.pathname === '/' && location.state === undefined) {
         variantsForAnimatingPages.initialState = {
             scale: 0,
@@ -58,19 +68,21 @@ const App = () => {
             transition: springType,
         };
     }
-    console.log(location.state);
-    if (location.pathname === '/room') {
+
+    // If user is on '/rooms/:roomName' page, slide left on exit
+    if (location.pathname.split('/')[1] === 'rooms') {
         variantsForAnimatingPages.exitState = {
             x: '100vw',
             transition: springType,
         };
     }
+
+    // if user is transitioning from '/rooms/:roomName' page to '/' page
     if (
         location.pathname === '/' &&
         location.state !== undefined &&
-        location.state.previousPage === 'room'
+        location.state.roomName !== undefined
     ) {
-        console.log('kur');
         variantsForAnimatingPages.initialState = {
             x: '-100vw',
             transition: springType,
@@ -82,8 +94,18 @@ const App = () => {
     }
     return (
         <div className='App'>
-            {shoudRedirectToHomePage ? (
+            {shouldRedirectToHomePage(location) ? (
                 <Redirect to={{ pathname: '/', state: undefined }} />
+            ) : shouldRedirectToJoinPage(location) ? (
+                <Redirect
+                    to={{
+                        pathname: '/join',
+                        state: {
+                            ...location.state,
+                            roomName: location.pathname.split('/')[2],
+                        },
+                    }}
+                />
             ) : (
                 <AnimatePresence>
                     <Switch location={location} key={location.pathname}>
@@ -117,17 +139,19 @@ const App = () => {
                         />
                         <Route
                             exact
-                            path='/room'
-                            render={(routeProps) => (
-                                <PageContainer
-                                    variantsForAnimatingPages={
-                                        variantsForAnimatingPages
-                                    }
-                                    key={routeProps.location.pathname}
-                                >
-                                    <RoomPage {...routeProps} />
-                                </PageContainer>
-                            )}
+                            path='/rooms/:roomName'
+                            render={(routeProps) => {
+                                return (
+                                    <PageContainer
+                                        variantsForAnimatingPages={
+                                            variantsForAnimatingPages
+                                        }
+                                        key={routeProps.location.pathname}
+                                    >
+                                        <RoomPage {...routeProps} />
+                                    </PageContainer>
+                                );
+                            }}
                         />
                         <Redirect to='/' />
                     </Switch>

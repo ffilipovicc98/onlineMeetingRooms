@@ -1,0 +1,56 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: #eeeeee;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+#root {
+    background-color: rgb(41, 41, 41);
+    height: 100%;
+}
+
+.App {
+    position: relative;
+    height: 100%;
+}
+
+.myButton {
+    color: rgb(0, 0, 0);
+}
+
+.page_container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.home_page,
+.join_page,
+.room_page {
+    height: 100%;
+    width: 100%;
+}
+
+.home_page {
+    background-color: rgb(30, 126, 204);
+}
+
+.join_page {
+    background-color: rgb(33, 100, 155);
+}
+
+.room_page {
+    background-color: rgb(25, 71, 109);
+}

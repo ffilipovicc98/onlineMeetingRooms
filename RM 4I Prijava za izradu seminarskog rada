@@ -1,0 +1,26 @@
+RM 4I - Prijava za izradu seminarskog rada
+
+Ime projekta:
+Online Meeting Rooms
+
+Kratak opis projekta:
+Zoom/Webex klon. Sa glavne stranice se bira soba. U sobi postoji grid sa video snimcima, koji poticu uzivo sa veb kamerica ljudi prisutnih u sobi. Pre ulaska u samu sobu postoji stranica za podesavanja kamerice i mikrofona, kako bi postojala mogucnost za gasenje kamerice i/ili mutovanje mikrofona. U sobi pored video sastanka postoji i cet. Dizajn i prototip veb aplikacije je vec uradjen (90%) u Adobe XD-u, tako da cete vec prilikom nakon prvog komita, biti u mogucnosti da pogledate sta ce i kako aplikacija raditi.
+
+Programski jezik / radni okviri:
+Dizajn i prototip je vec uradjen u AdobeXD-u.
+Implementaciju planiram da uradim u Javascriptu. I to, React na frontend-u, uz koriscenje react-spring biblioteke za animacije. A na backend-u cu koristiti Node.js i biblioteke express, socket.io, kao i webRTC protokol.
+
+Ime tima:
+Filip Filipovic
+
+Član 1 - ime i prezime:
+Filip Filipovic
+
+Član 1 - broj indeksa:
+mi17113
+
+Član 1 - link do GitHub naloga:
+https://github.com/ffilipovicc98
+
+Pročitali smo informacije o seminarskim radovima i prijavljujemo se za izradu seminarskog rada. Obavezujemo se da čemo poštovati tražena uputstva i ispuniti obaveze u navedenim rokovima:
+Da

@@ -1,10 +1,41 @@
 import React from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useSpring, useTransform } from 'framer-motion';
 
 const srpringConfig = {
     stiffness: 100,
-    damping: 15,
-    mass: 1,
+    damping: 18,
+    mass: 2,
+};
+
+const variantsOfHomePageSvgIcon = {
+    initialState: {},
+    animateState: {
+        transition: {
+            staggerChildren: 0.15,
+        },
+    },
+    exitState: {},
+};
+
+const transition2 = {
+    type: 'spring',
+    bounce: 0.45,
+    duration: 1.7,
+};
+
+const variantsOfHomePageSvgIconChlidren = {
+    initialState: { scale: 0, opacity: 0 },
+    animateState: {
+        scale: 1,
+        opacity: 1,
+        transition: {
+            ...transition2,
+        },
+    },
+    exitState: { scale: 1, opacity: 1 },
+    // initialState: {},
+    // animateState: {},
+    // exitState: {},
 };
 
 const HomePageSvgIcon = () => {
@@ -21,11 +52,12 @@ const HomePageSvgIcon = () => {
     let manInChairY = useTransform(y, (value) => -value / 9);
 
     return (
-        <svg
-            id='dafc5a10-31ce-4f4f-9768-af24e79fd7c2'
+        <motion.svg
+            id='home_page_svg_icon'
             xmlns='http://www.w3.org/2000/svg'
             xmlnsXlink='http://www.w3.org/1999/xlink'
             viewBox='0 0 1126.65 785.91'
+            variants={variantsOfHomePageSvgIcon}
             onMouseMove={(event) => {
                 const {
                     left,
@@ -72,14 +104,26 @@ const HomePageSvgIcon = () => {
                 />
             </defs>
             <title>undraw_social_networking_nqk4</title>
-            <motion.g id='Blob' x={blobX} y={blobY}>
+            <motion.g
+                id='Blob'
+                x={blobX}
+                y={blobY}
+                whileTap={{ scale: 0.9 }}
+                variants={variantsOfHomePageSvgIconChlidren}
+            >
                 <path
                     className='cls-1'
                     d='M1060,458.2c-39.1,53.7-26.2,130.4-3.6,191.5,7.6,20.5,16.2,42.1,12.3,64.3-4.8,27.2-27.4,47.6-50.8,58.7-42.8,20.2-93.3,17-131.5-8.5-33-22-56.2-58.6-89.9-79.5-56.3-35-129.4-19.4-192,7.4-44.3,18.9-92.9,43.3-136.1,25.8-30.4-12.3-50.9-43.6-61.6-77.1-5.2-16.2-8.8-33.7-19.2-46.3-6.2-7.5-14.3-12.8-22.7-17.1-76.4-40-174.6-15-248.7-59.6-50-30.1-81.1-88.6-94.1-150.1s-9.7-126.4-4.6-190.2C21.2,132.1,27,83.6,54.2,48,83.1,10.3,131.4-4.7,174.6,1.2s81.9,29.9,115.8,58.5c42.4,35.8,81.4,80.6,134.1,94.2,35.9,9.2,74.1,2.7,111.4-.2,62.4-4.8,124.6.7,186.4,7,59.2,6,118.7,12.7,174.8,32.4,39.7,13.9,71.1,40.2,108.4,58.2,24.3,11.7,51.1,14.4,74,29.6,28.3,18.6,53.8,51.7,45.5,91.3C1117.2,410,1080.8,429.7,1060,458.2Z'
                     transform='translate(0.06 0.04)'
                 />
             </motion.g>
-            <motion.g id='flowers' x={flowersX} y={flowersY}>
+            <motion.g
+                id='flowers'
+                x={flowersX}
+                y={flowersY}
+                whileTap={{ scale: 0.9 }}
+                variants={variantsOfHomePageSvgIconChlidren}
+            >
                 <path
                     className='cls-2'
                     d='M151.6,575.2s-3.3-97.8-56.2-153C73.2,399,58.6,369.6,54.8,337.7a248.09,248.09,0,0,1-1.2-45.6'
@@ -208,6 +252,7 @@ const HomePageSvgIcon = () => {
                 id='tableWithContents'
                 x={tableWithContentsX}
                 y={tableWithContentsY}
+                variants={variantsOfHomePageSvgIconChlidren}
             >
                 <g id='table'>
                     <rect
@@ -340,7 +385,7 @@ const HomePageSvgIcon = () => {
                         transform='translate(0.06 0.04)'
                     />
                 </g>
-                <g id='screenContent'>
+                <motion.g id='screenContent' whileTap={{ scale: 0.9 }}>
                     <rect
                         className='cls-9'
                         x='389.86'
@@ -508,7 +553,7 @@ const HomePageSvgIcon = () => {
                         width='72'
                         height='3'
                     />
-                </g>
+                </motion.g>
                 <g id='apple'>
                     <path
                         className='cls-3'
@@ -552,7 +597,12 @@ const HomePageSvgIcon = () => {
                     />
                 </g>
             </motion.g>
-            <motion.g id='manInAChair' x={manInChairX} y={manInChairY}>
+            <motion.g
+                id='manInAChair'
+                x={manInChairX}
+                y={manInChairY}
+                variants={variantsOfHomePageSvgIconChlidren}
+            >
                 <path
                     className='cls-18'
                     d='M756.2,425.8a73.08,73.08,0,0,0,4.3-43.8,368.78,368.78,0,0,1-7.1-53.3c-1.1-17.1-3.6-28.3-6.4-35.5h0s1-23.3-14.8-35.5-52.7-31.5-52.7-31.5l3.7-15.1H683a13.31,13.31,0,0,0,3.2-1.5,13.12,13.12,0,0,0,2.8-2.4c6.2-5.5,6.3-15.5,9.3-23.5,2.3-6.1,6.5-11.4,9.6-17.2,5.6-10.6,6.9-23.6,1.7-34.4s-17.5-18.5-29.7-17.1a52.34,52.34,0,0,0-11.6,3.1c-8.9,3.1-15.9-5.7-24.7-2.6-4.5,1.6-21.1,3.3-24.7,7.8a4.38,4.38,0,0,0-1.7,2.3c-.9,4.4,7.2,13.3,13.2,20.4a32.39,32.39,0,0,0-7.4,20.7v1a32.38,32.38,0,0,0,10,23.4,147.4,147.4,0,0,1-2.4,14.6h-.7S625.7,224,612,224c-3.7,0-8.7-.2-14-.5a145.68,145.68,0,0,0-47.8,5.5c-5.3,1.5-11.2,1.6-16.1-1.9-11.8-8.5-24.4-30.1-26.2-33.1,1.3-8.8,1.1-24.8-17.1-27.8-21.4-3.4-20.2,21.3-7.9,37.1a10.55,10.55,0,0,0-.6,2.4c-1,13.2,11.6,37.5,14.8,40.6s3.2,22.3,25.3,27.4,38,7.1,39,32.5,22.1,51.7,11.6,81.2c-6.3,17.7-4.7,26.9-2.3,31.5l-.6,1.8c-2.4,7.3-5.4,14.6-8.7,19a36.18,36.18,0,0,0-2.2,3.2c-8.6,5.6-17.5,11.8-21,15.6-7.4,8.1-4.2,40.6,0,53.8s30.6,93.3,30.6,93.3h1l.3,2,1.1,6.6c-.3-.2-.7-.4-1-.6a1.75,1.75,0,0,0-2.4.4.37.37,0,0,0-.1.3l-5.1,11.5s-21.1-9.1-22.2,12.2v2.4c0,11.3,6.2,15.5,11.5,17.1a43,43,0,0,1,13.7,6.4c5.1,3.6,12.8,7.4,21.6,5.3a19.78,19.78,0,0,1,5.4-.5c3.8.1,10.2-1,10-9.5v-2s-4.5-17.1-4.6-25a5.87,5.87,0,0,1,.4-2.3c.8-1.4,1-4.2.9-7.1a64.49,64.49,0,0,0-.4-7.6,1.2,1.2,0,0,0-1.3-1,1,1,0,0,0-.8.5l-.2.2c-.7-2.3-1.5-4.9-2.2-7.4l-.6-2h1.4s-8.4-49.8-5.3-53.8c2.1-2.7-1.3-34.4-3.8-56,25.7,1.6,66.6-2.9,94.6-4.3a35.48,35.48,0,0,0,15.3-4.3c-2.5,20.5-7.2,61.5-4.9,64.6,3.2,4.1-5.3,53.8-5.3,53.8h1.3l-.5,1.5h.2c-.8,2.6-1.6,5.5-2.4,7.9l-.2-.2a1.15,1.15,0,0,0-1.6-.3,1,1,0,0,0-.5.8,64.5,64.5,0,0,0-.4,7.6c0,2.9.2,5.6.9,7.1a5.87,5.87,0,0,1,.4,2.3c-.2,7.9-4.6,25-4.6,25v2c-.2,8.5,6.2,9.6,10,9.5a19.78,19.78,0,0,1,5.4.5c8.8,2,16.5-1.7,21.6-5.3a44,44,0,0,1,13.7-6.4c5.3-1.5,11.6-5.7,11.5-17.1V638c-1.1-21.3-22.2-12.2-22.2-12.2l-5.2-11.5a1.68,1.68,0,0,0-2.3-.8c-.1,0-.2.1-.3.1-.3.2-.7.4-1,.6l1.4-8.7h1s26.3-80.2,30.6-93.3,7.4-45.7,0-53.8c-3.5-3.8-12.6-10.2-21.3-15.8a192.93,192.93,0,0,1,21.3,14.8ZM710.7,436l-3.3-2a15.94,15.94,0,0,0-2.5-3.3,35.83,35.83,0,0,1-2.6-2.9c-2.1-6.2-9.7-32,.5-45.3,7.4-9.7,7.9-28.4,7.3-40.7,5,24.5,12,59,12.7,66.1C723.5,416.7,714.5,430.6,710.7,436Z'
@@ -784,7 +834,7 @@ const HomePageSvgIcon = () => {
                     transform='translate(0.06 0.04)'
                 />
             </motion.g>
-        </svg>
+        </motion.svg>
     );
 };
 

@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const PageContainer = ({ children, variantsForAnimatingPages }) => {
+    console.log(variantsForAnimatingPages);
+    console.log(children);
     return (
         <motion.div
             variants={variantsForAnimatingPages}

@@ -102,6 +102,7 @@ html {
 body {
     height: 100vh;
     overflow: hidden;
+    color: black;
 }
 
 #root {
@@ -110,6 +111,7 @@ body {
 }
 
 .App {
+    background-color: #fff;
     position: relative;
     height: 100%;
 }
@@ -119,33 +121,86 @@ body {
 }
 
 .page_container {
+    background-color: #fff;
     position: absolute;
     height: 100%;
     width: 100%;
 }
 
-.home_page,
-.join_page,
-.room_page {
-    height: 100%;
-    width: 100%;
-}
+/* HomePage beginning */
 
 .home_page {
-    background-color: #a8c3da;
+    height: 100%;
+    width: 100%;
+    background: url(./components/HomePage/HomePageBackground.svg) center #fff;
+
+    /* flex properties as parent */
+    display: flex;
 }
 
-svg#dafc5a10-31ce-4f4f-9768-af24e79fd7c2 {
-    /* border: solid 3px #cb7b7b; */
+/* home_page_availibale_rooms_half beginning */
+
+.home_page_availibale_rooms_half {
+    /* debugging properties */
+    /* background-color: rgb(153, 78, 78); */
+    /* opacity: 0.5; */
+
+    /* main properties */
+    width: 50%;
+    height: 100%;
+
+    /* flex properties as parent */
+
+    /* flex properties as children */
+}
+
+/* home_page_availibale_rooms_half end */
+
+/* home_page_svg_icon_half beginning */
+
+.home_page_svg_icon_half {
+    /* debugging properties */
+    /* background-color: rgb(78, 148, 153); */
+    /* opacity: 0.5; */
+
+    /* main properties */
+    width: 50%;
+    height: 100%;
+
+    /* flex properties as parent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* flex properties as children */
+}
+
+.home_page_svg_icon_half svg#home_page_svg_icon {
+    /* debugging properties */
+    /* background-color: rgb(49, 161, 46); */
+    /* opacity: 0.5; */
+
+    /* main properties */
     padding: 50px;
-    width: 600px;
+    width: 700px;
     overflow: visible;
 }
 
+/* home_page_svg_icon_half beginning end */
+
+/* HomePage end */
+
+/* JoinPage */
+
 .join_page {
+    height: 100%;
+    width: 100%;
     background-color: #4a7ca5;
 }
 
+/* RoomPage */
+
 .room_page {
+    height: 100%;
+    width: 100%;
     background-color: #809bb1;
 }

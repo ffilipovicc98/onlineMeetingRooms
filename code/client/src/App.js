@@ -60,12 +60,14 @@ const App = () => {
     // if HomePage is loading for the first time
     if (location.pathname === '/' && location.state === undefined) {
         variantsForAnimatingPages.initialState = {
-            scale: 0,
             transition: springType,
         };
         variantsForAnimatingPages.animateState = {
-            scale: 1,
-            transition: springType,
+            transition: {
+                ...springType,
+                duration: 0.2,
+                delayChildren: 0.2,
+            },
         };
     }
 

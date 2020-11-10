@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import HomePageSvgIcon from '../HomePageSvgIcon/HomePageSvgIcon';
 
 const HomePage = () => {
     const history = useHistory();
@@ -26,6 +27,7 @@ const HomePage = () => {
             >
                 Next Page
             </button>
+            <HomePageSvgIcon />
         </div>
     );
 };

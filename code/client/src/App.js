@@ -3,8 +3,9 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import JoinPage from './components/JoinPage/JoinPage';
 import RoomPage from './components/RoomPage/RoomPage';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, useAnimation } from 'framer-motion';
 import PageContainer from './components/PageContainer/PageContainer';
+import { useEffect } from 'react';
 
 const springType = {
     type: 'spring',
@@ -94,6 +95,7 @@ const App = () => {
             transition: springType,
         };
     }
+
     return (
         <div className='App'>
             {shouldRedirectToHomePage(location) ? (

@@ -33,9 +33,6 @@ const variantsOfHomePageSvgIconChlidren = {
         },
     },
     exitState: { scale: 1, opacity: 1 },
-    // initialState: {},
-    // animateState: {},
-    // exitState: {},
 };
 
 const HomePageSvgIcon = () => {

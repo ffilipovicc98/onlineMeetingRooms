@@ -5,6 +5,7 @@ import { motion, useAnimation } from 'framer-motion';
 
 import InputBox from '../InputBox/InputBox';
 import SimpleButton from '../SimpleButton/SimpleButton';
+import { useHistory } from 'react-router-dom';
 
 const AddNewRoomDiv = styled(motion.div)`
     --add_new_room_width: 350px;
@@ -205,6 +206,8 @@ const AddNewRoomComponent = () => {
         }
         await toggleIsOpen();
     };
+
+    const history = useHistory();
     return (
         <AddNewRoomDiv>
             <AddNewRoomButton
@@ -245,7 +248,19 @@ const AddNewRoomComponent = () => {
                         buttonHeight='var(--input_and_button_hieght)'
                         fontSize='.95em'
                         onClickCallback={(event) => {
-                            console.log('Clicked');
+                            history.push({
+                                pathname: `/join`,
+                                state: {
+                                    roomName: roomNameInputValue,
+                                    hostName: undefined,
+                                    userName: undefined,
+                                    isUserHost: true,
+                                    isUserSeeAnimationsOnHomePage: true,
+                                    isUserComingFromHomePage: true,
+                                    isUserComingFromJoinPage: false,
+                                    isUserComingFromRoomPage: false,
+                                },
+                            });
                         }}
                         variants={variantsOfSimpleButton}
                     >

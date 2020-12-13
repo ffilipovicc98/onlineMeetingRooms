@@ -1,13 +1,98 @@
 import React, { useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+import JoinPageBackground from './JoinPageBackground.svg';
+import JoinPageSvgIcon from '../JoinPageSvgIcon/JoinPageSvgIcon';
+import SimpleButton from '../SimpleButton/SimpleButton';
+import { BsArrowLeftShort } from 'react-icons/bs';
+import RoomNameAndHostText from '../RoomNameAndHostText/RoomNameAndHostText';
+import JoinHeader from '../JoinHeader/JoinHeader';
+import MeetingSettings from '../MeetingSettings/MeetingSettings';
+
+const StyledJoinPage = styled.div`
+    height: 100%;
+    width: 100%;
+    background: url(${JoinPageBackground}) center #fff;
+    /* background-size: 120% 120%; */
+
+    /* flex properties as parent */
+`;
+
+const Row = styled.div`
+    /* border: solid 10px #423; */
+
+    width: 95%;
+    position: absolute;
+    top: 220px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+`;
+
+const SvgIconHalf = styled.div`
+    /* background-color: rgb(78, 148, 153); */
+    /* opacity: 0.5; */
+
+    width: 35%;
+    height: 100%;
+
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const MeetingSettingsHalf = styled.div`
+    /* background-color: rgb(153, 78, 78); */
+    /* opacity: 0.5; */
+
+    /* width: 50%; */
+    height: 100%;
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const JoinPage = ({ location, match }) => {
     const history = useHistory();
-    const roomName = location.state.roomName;
+    const { roomName, hostName } = location.state;
     const [userNameInputValue, setUserNameInputValue] = useState('');
     return (
-        <div className='join_page'>
-            <h1>Joining room {roomName}</h1>
+        <StyledJoinPage>
+            <JoinHeader
+                roomName={roomName}
+                hostName={hostName}
+                userName={userNameInputValue}
+            />
+            <Row>
+                <SvgIconHalf>
+                    <JoinPageSvgIcon />
+                </SvgIconHalf>
+                <MeetingSettingsHalf>
+                    <MeetingSettings
+                        roomName={roomName}
+                        hostName={hostName}
+                        userName={userNameInputValue}
+                        setUserName={setUserNameInputValue}
+                    />
+                </MeetingSettingsHalf>
+            </Row>
+        </StyledJoinPage>
+    );
+};
+
+/************************************************************************/
+
+/************************************************************************/
+
+/************************************************************************/
+
+{
+    /* <h1>Joining room {roomName}</h1>
             <input
                 type='text'
                 onChange={(event) => {
@@ -27,10 +112,7 @@ const JoinPage = ({ location, match }) => {
                 }
             >
                 Next Page
-            </button>
-        </div>
-        // </motion.div>
-    );
-};
+            </button> */
+}
 
 export default JoinPage;

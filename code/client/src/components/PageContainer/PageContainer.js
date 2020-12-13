@@ -1,9 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
+
+const StyledPageContainer = styled(motion.div)`
+    background-color: #fff;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+`;
 
 const PageContainer = ({ children, variantsForAnimatingPages }) => {
     return (
-        <motion.div
+        <StyledPageContainer
             variants={variantsForAnimatingPages}
             initial='initialState'
             animate='animateState'
@@ -11,7 +19,7 @@ const PageContainer = ({ children, variantsForAnimatingPages }) => {
             className='page_container'
         >
             {children}
-        </motion.div>
+        </StyledPageContainer>
     );
 };
 

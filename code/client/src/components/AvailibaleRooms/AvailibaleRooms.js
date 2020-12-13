@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AvailibaleRoomsAnimatedText from '../AvailibaleRoomsAnimatedText/AvailibaleRoomsAnimatedText';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import AvailibaleRoomsWrapper from '../AvailibaleRoomsWrapper/AvailibaleRoomsWrapper';
+import styled from 'styled-components';
 
 const wait = (timeInMS = 0) =>
     new Promise((resolve) => setTimeout(resolve, timeInMS));
@@ -19,6 +20,7 @@ const variantsOfAvailibaleRooms = {
         width: '260px',
         height: '70px',
         backgroundColor: '#2b517f',
+        boxShadow: '2px 2px 3px 2px rgba(0, 0, 0, 0.2)',
         transition: {
             type: 'spring',
             bounce: 0.5,
@@ -31,8 +33,23 @@ const variantsOfAvailibaleRooms = {
         height: 700,
         transition: openCloseTransition,
         backgroundColor: '#f2f2f2',
+        boxShadow: '2px 2px 7px 7px rgba(0, 0, 0, 0.2)',
     },
 };
+
+const StyledAvailibaleRooms = styled(motion.div)`
+    /* main properties */
+    background-color: #2b517f;
+    border-radius: 3px;
+    font-size: 1.1em;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.2);
+
+    /* flex properties as parent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const AvailibaleRooms = () => {
     const animationControls = useAnimation();
@@ -55,8 +72,7 @@ const AvailibaleRooms = () => {
     );
 
     return (
-        <motion.div
-            className='availibale_rooms'
+        <StyledAvailibaleRooms
             variants={variantsOfAvailibaleRooms}
             animate={animationControls}
             onClick={toggleIsOpen}
@@ -75,7 +91,7 @@ const AvailibaleRooms = () => {
                     />
                 )}
             </AnimatePresence>
-        </motion.div>
+        </StyledAvailibaleRooms>
     );
 };
 

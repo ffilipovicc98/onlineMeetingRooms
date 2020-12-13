@@ -1,12 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import AvailibaleRoomsListElement from '../AvailibaleRoomsListElement/AvailibaleRoomsListElement';
+import styled from 'styled-components';
 
-const transition = { staggerChildren: 0.05 };
+const StyledContainer = styled(motion.div)`
+    /* background: rgb(14, 75, 165); */
+    width: 100%;
+    height: 75%;
 
-const variantsOfAvailibaleRoomsListContainer = {
-    open: { transition: { ...transition, staggerDirection: 1 } },
-    close: { transition: { ...transition, staggerDirection: -1 } },
+    /* flex properties as parent */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+`;
+
+const variantsOfStyledContainer = {
+    open: { transition: { staggerChildren: 0.05, staggerDirection: 1 } },
+    close: { transition: { staggerChildren: 0.05, staggerDirection: -1 } },
 };
 
 const AvailibaleRoomsListContainer = () => {
@@ -38,10 +49,7 @@ const AvailibaleRoomsListContainer = () => {
         },
     ];
     return (
-        <motion.div
-            className='availibale_rooms_list_container'
-            variants={variantsOfAvailibaleRoomsListContainer}
-        >
+        <StyledContainer variants={variantsOfStyledContainer}>
             {hardcoded_data.map(({ roomName, host, roomID }) => (
                 <AvailibaleRoomsListElement
                     roomID={roomID}
@@ -50,7 +58,7 @@ const AvailibaleRoomsListContainer = () => {
                     roomName={roomName}
                 />
             ))}
-        </motion.div>
+        </StyledContainer>
     );
 };
 

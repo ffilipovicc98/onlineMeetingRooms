@@ -1,20 +1,72 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import HomePageSvgIcon from '../HomePageSvgIcon/HomePageSvgIcon';
-import { motion } from 'framer-motion';
 import AvailibaleRooms from '../AvailibaleRooms/AvailibaleRooms';
 import AddNewRoomComponent from '../AddNewRoomComponent/AddNewRoomComponent';
+import styled from 'styled-components';
+import HomePageBackground from './HomePageBackground.svg';
+import { motion } from 'framer-motion';
 
-const transitionOfHomePage = {
+const StyledHomePage = styled(motion.div)`
+    height: 100%;
+    width: 100%;
+    background: url(${HomePageBackground}) center #fff;
+    /* background-size: 120% 120%; */
+
+    /* flex properties as parent */
+    display: flex;
+`;
+
+const transitionOfStyledHomePage = {
     duration: 1,
 };
 
-const variantsOfHomePage = {
-    initialState: { opacity: 0, x: '-2vw', transition: transitionOfHomePage },
-    animateState: { opacity: 1, x: '0vw', transition: transitionOfHomePage },
+const variantsOfStyledHomePage = {
+    initialState: {
+        opacity: 0,
+        x: '-2vw',
+        transition: transitionOfStyledHomePage,
+    },
+    animateState: {
+        opacity: 1,
+        x: '0vw',
+        transition: transitionOfStyledHomePage,
+    },
 };
 
-const variantsOfHomePageSvgIconHalf = {
+const AvailibaleRoomsHalf = styled.div`
+    /* debugging properties */
+    /* background-color: rgb(153, 78, 78); */
+    /* opacity: 0.5; */
+
+    /* main properties */
+    width: 50%;
+    height: 100%;
+
+    /* flex properties as parent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* flex properties as children */
+`;
+
+const SvgIconHalf = styled.div`
+    /* debugging properties */
+    /* background-color: rgb(78, 148, 153); */
+    /* opacity: 0.5; */
+
+    /* main properties */
+    width: 50%;
+    height: 100%;
+
+    /* flex properties as parent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* flex properties as children */
+`;
+
+const variantsOfSvgIconHalf = {
     animateState: {
         transition: {
             delayChildren: 0.65,
@@ -23,52 +75,16 @@ const variantsOfHomePageSvgIconHalf = {
 };
 
 const HomePage = () => {
-    const history = useHistory();
-    const [roomNameInputValue, setRoomNameInputValue] = useState('');
-
     return (
-        <motion.div className='home_page' variants={variantsOfHomePage}>
-            <input
-                type='text'
-                onChange={(event) => {
-                    setRoomNameInputValue(event.currentTarget.value);
-                }}
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    color: '#000',
-                }}
-            />
-            <button
-                className='myButton'
-                onClick={() =>
-                    history.push({
-                        pathname: `/join`,
-                        state: {
-                            roomName: roomNameInputValue,
-                        },
-                    })
-                }
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: '250px',
-                }}
-            >
-                Next Page
-            </button>
+        <StyledHomePage variants={variantsOfStyledHomePage}>
             <AddNewRoomComponent />
-            <motion.div className='home_page_availibale_rooms_half'>
+            <AvailibaleRoomsHalf>
                 <AvailibaleRooms />
-            </motion.div>
-            <motion.div
-                className='home_page_svg_icon_half'
-                variants={variantsOfHomePageSvgIconHalf}
-            >
+            </AvailibaleRoomsHalf>
+            <SvgIconHalf variants={variantsOfSvgIconHalf}>
                 <HomePageSvgIcon />
-            </motion.div>
-        </motion.div>
+            </SvgIconHalf>
+        </StyledHomePage>
     );
 };
 

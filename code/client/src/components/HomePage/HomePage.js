@@ -4,8 +4,9 @@ import AvailibaleRooms from '../AvailibaleRooms/AvailibaleRooms';
 import AddNewRoomComponent from '../AddNewRoomComponent/AddNewRoomComponent';
 import styled from 'styled-components';
 import HomePageBackground from './HomePageBackground.svg';
+import { motion } from 'framer-motion';
 
-const StyledHomePage = styled.div`
+const StyledHomePage = styled(motion.div)`
     height: 100%;
     width: 100%;
     background: url(${HomePageBackground}) center #fff;

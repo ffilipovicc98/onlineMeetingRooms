@@ -252,6 +252,7 @@ const AddNewRoomComponent = () => {
                                 pathname: `/join`,
                                 state: {
                                     roomName: roomNameInputValue,
+                                    hostName: 'You',
                                 },
                             });
                         }}

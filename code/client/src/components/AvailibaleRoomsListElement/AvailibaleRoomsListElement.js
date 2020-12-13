@@ -99,6 +99,7 @@ const AvailibaleRoomsListElement = ({ roomID, roomName, hostName }) => {
                             pathname: `/join`,
                             state: {
                                 roomName,
+                                hostName,
                             },
                         });
                     }}

@@ -6,6 +6,7 @@ import RoomPage from './components/RoomPage/RoomPage';
 import { AnimatePresence, useAnimation } from 'framer-motion';
 import PageContainer from './components/PageContainer/PageContainer';
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 const springType = {
     type: 'spring',
@@ -39,6 +40,12 @@ const shouldRedirectToJoinPage = (currentUserLocation) => {
         isUserComingToRoomPage && isUserComingFromPageWhichDidntSetStateRoomName
     );
 };
+
+const StyledApp = styled.div`
+    background-color: #fff;
+    position: relative;
+    height: 100%;
+`;
 
 const App = () => {
     const location = useLocation();
@@ -97,7 +104,7 @@ const App = () => {
     }
 
     return (
-        <div className='App'>
+        <StyledApp>
             {shouldRedirectToHomePage(location) ? (
                 <Redirect to={{ pathname: '/', state: undefined }} />
             ) : shouldRedirectToJoinPage(location) ? (
@@ -161,7 +168,7 @@ const App = () => {
                     </Switch>
                 </AnimatePresence>
             )}
-        </div>
+        </StyledApp>
     );
 };
 

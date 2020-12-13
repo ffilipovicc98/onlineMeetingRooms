@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
+import styled from 'styled-components';
 
 const srpringConfig = {
     stiffness: 100,
@@ -35,6 +36,17 @@ const variantsOfHomePageSvgIconChlidren = {
     exitState: { scale: 1, opacity: 1 },
 };
 
+const StyledHomePageSvgIcon = styled(motion.svg)`
+    /* debugging properties */
+    /* background-color: rgb(49, 161, 46); */
+    /* opacity: 0.5; */
+
+    /* main properties */
+    padding: 50px;
+    width: 700px;
+    overflow: visible;
+`;
+
 const HomePageSvgIcon = () => {
     let x = useSpring(0, srpringConfig);
     let y = useSpring(0, srpringConfig);
@@ -49,7 +61,7 @@ const HomePageSvgIcon = () => {
     let manInChairY = useTransform(y, (value) => -value / 9);
 
     return (
-        <motion.svg
+        <StyledHomePageSvgIcon
             id='home_page_svg_icon'
             xmlns='http://www.w3.org/2000/svg'
             xmlnsXlink='http://www.w3.org/1999/xlink'
@@ -831,7 +843,7 @@ const HomePageSvgIcon = () => {
                     transform='translate(0.06 0.04)'
                 />
             </motion.g>
-        </motion.svg>
+        </StyledHomePageSvgIcon>
     );
 };
 

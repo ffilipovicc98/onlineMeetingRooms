@@ -3,17 +3,20 @@ import { motion, usePresence } from 'framer-motion';
 import AvailibaleRoomsHeader from '../AvailibaleRoomsHeader/AvailibaleRoomsHeader';
 import AvailibaleRoomsListContainer from '../AvailibaleRoomsListContainer/AvailibaleRoomsListContainer';
 import AvailibaleRoomsFooter from '../AvailibaleRoomsFooter/AvailibaleRoomsFooter';
+import styled from 'styled-components';
 
 const wait = (timeInMS = 0) =>
     new Promise((resolve) => setTimeout(resolve, timeInMS));
 
-const transition = {
-    staggerChildren: 0.1,
-};
+const StyledWrapper = styled(motion.div)`
+    /* background-color: red; */
+    width: 90%;
+    height: 97%;
+`;
 
-const variantOfAvailibaleRoomsWrapper = {
-    open: { transition: { ...transition, staggerDirection: 1 } },
-    close: { transition: { ...transition, staggerDirection: -1 } },
+const variantOfStyledWrapper = {
+    open: { transition: { staggerChildren: 0.1, staggerDirection: 1 } },
+    close: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
 };
 
 const AvailibaleRoomsWrapper = ({ parentAnimationControls }) => {
@@ -27,9 +30,8 @@ const AvailibaleRoomsWrapper = ({ parentAnimationControls }) => {
             })();
     }, [isPresent]);
     return (
-        <motion.div
-            className='availibale_rooms_wrapper'
-            variants={variantOfAvailibaleRoomsWrapper}
+        <StyledWrapper
+            variants={variantOfStyledWrapper}
             initial='close'
             animate='open'
             exit='close'
@@ -37,7 +39,7 @@ const AvailibaleRoomsWrapper = ({ parentAnimationControls }) => {
             <AvailibaleRoomsHeader text='Availibale Rooms' />
             <AvailibaleRoomsListContainer />
             <AvailibaleRoomsFooter />
-        </motion.div>
+        </StyledWrapper>
     );
 };
 

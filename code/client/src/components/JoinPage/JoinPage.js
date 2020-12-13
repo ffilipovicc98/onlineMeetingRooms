@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+
+const StyledJoinPage = styled.div`
+    height: 100%;
+    width: 100%;
+    background-color: #4a7ca5;
+`;
 
 const JoinPage = ({ location, match }) => {
     const history = useHistory();
     const roomName = location.state.roomName;
     const [userNameInputValue, setUserNameInputValue] = useState('');
     return (
-        <div className='join_page'>
+        <StyledJoinPage>
             <h1>Joining room {roomName}</h1>
             <input
                 type='text'
@@ -28,7 +35,7 @@ const JoinPage = ({ location, match }) => {
             >
                 Next Page
             </button>
-        </div>
+        </StyledJoinPage>
         // </motion.div>
     );
 };

@@ -1,12 +1,19 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+
+const StyledRoomPage = styled.div`
+    height: 100%;
+    width: 100%;
+    background-color: #809bb1;
+`;
 
 const RoomPage = ({ location }) => {
     const { userName, roomName } = location.state;
     const history = useHistory();
 
     return (
-        <div className='room_page'>
+        <StyledRoomPage>
             <h1>{`User ${userName} has joined room ${roomName}`}</h1>
             <button
                 className='myButton'
@@ -19,7 +26,7 @@ const RoomPage = ({ location }) => {
             >
                 Nazad
             </button>
-        </div>
+        </StyledRoomPage>
     );
 };
 

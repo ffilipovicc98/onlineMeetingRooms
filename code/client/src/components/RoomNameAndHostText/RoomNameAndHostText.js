@@ -33,7 +33,9 @@ const RoomNameAndHostText = (props) => {
             <RoomNameText>{props.roomName}</RoomNameText>
             <HostNameText>
                 Host:{' '}
-                <span style={{ fontStyle: 'italic' }}>{props.hostName}</span>
+                <span style={{ fontStyle: 'italic' }}>
+                    {props.hostName ? props.hostName : props.userName}
+                </span>
             </HostNameText>
         </Wrapper>
     );

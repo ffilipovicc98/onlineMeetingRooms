@@ -5,8 +5,9 @@ import JoinPage from './components/JoinPage/JoinPage';
 import RoomPage from './components/RoomPage/RoomPage';
 import { AnimatePresence, useAnimation } from 'framer-motion';
 import PageContainer from './components/PageContainer/PageContainer';
-import { useEffect } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
+import { usePageAnimations } from './components/PageAnimationsContext/PageAnimationsContext';
 
 const springType = {
     type: 'spring',
@@ -49,71 +50,68 @@ const StyledApp = styled.div`
 
 const App = () => {
     const location = useLocation();
+    const pageAnimationsContextObject = usePageAnimations();
+    pageAnimationsContextObject.resetVariants();
 
-    const variantsForAnimatingPages = {
-        initialState: {
-            x: '100vw',
-            transition: springType,
-        },
-        animateState: {
-            x: '0',
-            transition: springType,
-        },
-        exitState: {
-            x: '-100vw',
-            transition: springType,
-        },
-    };
+    // // if HomePage is loading for the first time
+    // if (
+    //     location.pathname === '/' &&
+    //     !location.state?.isUserSeeAnimationsOnHomePage
+    // ) {
+    //     pageAnimationsContextObject.setVariantsForFirstVisit();
+    // }
 
-    // if HomePage is loading for the first time
-    if (location.pathname === '/' && location.state === undefined) {
-        variantsForAnimatingPages.initialState = {
-            transition: springType,
-        };
-        variantsForAnimatingPages.animateState = {
-            transition: {
-                ...springType,
-                duration: 0.2,
-                delayChildren: 0.2,
-            },
-        };
-    }
+    // // If user is on '/rooms/:roomName' page, slide left on exit
+    // if (location.pathname.split('/')[1] === 'rooms') {
+    //     pageAnimationsContextObject.setVariantsForSlidingLeftExit();
+    // }
 
-    // If user is on '/rooms/:roomName' page, slide left on exit
-    if (location.pathname.split('/')[1] === 'rooms') {
-        variantsForAnimatingPages.exitState = {
-            x: '100vw',
-            transition: springType,
-        };
-    }
-
-    // if user is transitioning from '/rooms/:roomName' page to '/' page
-    if (
-        location.pathname === '/' &&
-        location.state !== undefined &&
-        location.state.roomName !== undefined
-    ) {
-        variantsForAnimatingPages.initialState = {
-            x: '-100vw',
-            transition: springType,
-        };
-        variantsForAnimatingPages.animateState = {
-            x: '0',
-            transition: springType,
-        };
-    }
+    // // if user is transitioning from '/rooms/:roomName' page to '/' page
+    // if (
+    //     location.pathname === '/' &&
+    //     (location.state.isUserComingFromJoinPage ||
+    //         location.state?.isUserComingFromRoomPage)
+    // ) {
+    //     pageAnimationsContextObject.setVariantsForSlidingLeftInitialAnimate();
+    // }
 
     return (
         <StyledApp>
             {shouldRedirectToHomePage(location) ? (
-                <Redirect to={{ pathname: '/', state: undefined }} />
+                <Redirect
+                    to={{
+                        pathname: '/',
+                        state: {
+                            roomName: undefined,
+                            hostName: undefined,
+                            userName: undefined,
+                            isUserHost: undefined,
+                            isUserSeeAnimationsOnHomePage:
+                                location.isUserSeeAnimationsOnHomePage,
+                            isUserComingFromHomePage: false,
+                            isUserComingFromJoinPage: false,
+                            isUserComingFromRoomPage: false,
+                            isUserComingFromInvalidPage: true,
+                            isUserComingFromUrl: false,
+                        },
+                    }}
+                />
             ) : shouldRedirectToJoinPage(location) ? (
                 <Redirect
                     to={{
                         pathname: '/join',
                         state: {
-                            ...location.state,
                             roomName: location.pathname.split('/')[2],
+                            hostName: undefined,
+                            userName: undefined,
+                            isUserHost: false,
+                            // isUserSeeAnimationsOnHomePage:
+                            // location.state.isUserSeeAnimationsOnHomePage,
+                            isUserComingFromHomePage: false,
+                            isUserComingFromJoinPage: false,
+                            isUserComingFromRoomPage: false,
+                            isUserComingFromInvalidPage: false,
+                            isUserComingFromUrl: true,
                         },
                     }}
                 />
@@ -126,7 +124,7 @@ const App = () => {
                             render={(routeProps) => (
                                 <PageContainer
                                     variantsForAnimatingPages={
-                                        variantsForAnimatingPages
+                                        pageAnimationsContextObject.variants
                                     }
                                     key={routeProps.location.pathname}
                                 >
@@ -140,7 +138,7 @@ const App = () => {
                             render={(routeProps) => (
                                 <PageContainer
                                     variantsForAnimatingPages={
-                                        variantsForAnimatingPages
+                                        pageAnimationsContextObject.variants
                                     }
                                     key={routeProps.location.pathname}
                                 >
@@ -155,7 +153,7 @@ const App = () => {
                                 return (
                                     <PageContainer
                                         variantsForAnimatingPages={
-                                            variantsForAnimatingPages
+                                            pageAnimationsContextObject.variants
                                         }
                                         key={routeProps.location.pathname}
                                     >
@@ -164,7 +162,25 @@ const App = () => {
                                 );
                             }}
                         />
-                        <Redirect to='/' />
+                        <Redirect
+                            to={{
+                                pathname: '/',
+                                state: {
+                                    roomName: undefined,
+                                    hostName: undefined,
+                                    userName: undefined,
+                                    isUserHost: undefined,
+                                    // isUserSeeAnimationsOnHomePage:
+                                    // location.state
+                                    // .isUserSeeAnimationsOnHomePage,
+                                    isUserComingFromHomePage: false,
+                                    isUserComingFromJoinPage: false,
+                                    isUserComingFromRoomPage: false,
+                                    isUserComingFromInvalidPage: true,
+                                    isUserComingFromUrl: false,
+                                },
+                            }}
+                        />
                     </Switch>
                 </AnimatePresence>
             )}

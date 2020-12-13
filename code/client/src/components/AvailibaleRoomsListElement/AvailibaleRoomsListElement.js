@@ -100,6 +100,12 @@ const AvailibaleRoomsListElement = ({ roomID, roomName, hostName }) => {
                             state: {
                                 roomName,
                                 hostName,
+                                userName: undefined,
+                                isUserHost: false,
+                                isUserSeeAnimationsOnHomePage: true,
+                                isUserComingFromHomePage: true,
+                                isUserComingFromJoinPage: false,
+                                isUserComingFromRoomPage: false,
                             },
                         });
                     }}

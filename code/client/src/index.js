@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
+import {
+    PageAnimationsProvider,
+    usePageAnimations,
+} from './components/PageAnimationsContext/PageAnimationsContext';
 
 const GlobalStyle = createGlobalStyle`
     *,
@@ -37,7 +41,9 @@ ReactDOM.render(
     <React.StrictMode>
         <GlobalStyle />
         <Router>
-            <App />
+            <PageAnimationsProvider>
+                <App />
+            </PageAnimationsProvider>
         </Router>
     </React.StrictMode>,
     document.getElementById('root')

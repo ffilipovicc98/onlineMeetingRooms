@@ -10,6 +10,7 @@ const StyledHomePage = styled(motion.div)`
     height: 100%;
     width: 100%;
     background: url(${HomePageBackground}) center #fff;
+    /* background-size: 120% 120%; */
 
     /* flex properties as parent */
     display: flex;

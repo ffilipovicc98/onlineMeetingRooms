@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import SimpleButton from '../SimpleButton/SimpleButton';
@@ -71,6 +71,9 @@ const Content = styled.div`
 
 const JoinHeader = (props) => {
     const history = useHistory();
+    // const variantsForAnimatingPages = useContext(
+    //     variantsForAnimatingPagesContext
+    // );
     return (
         <Header>
             <BackButton
@@ -82,9 +85,29 @@ const JoinHeader = (props) => {
                 borderBottomLeftRadius='0px'
                 borderBottomRightRadius='0px'
                 onClickCallback={() => {
+                    // variantsForAnimatingPages.exitState = {
+                    //     x: '100vw',
+                    //     transition: {
+                    //         type: 'spring',
+                    //         bounce: 0,
+                    //         duration: 1,
+                    //         restDelta: 0.005,
+                    //     },
+                    // };
                     history.push({
                         pathname: `/`,
-                        state: {},
+                        state: {
+                            roomName: undefined,
+                            hostName: undefined,
+                            userName: undefined,
+                            isUserHost: undefined,
+                            isUserSeeAnimationsOnHomePage:
+                                history.location
+                                    .stateisUserSeeAnimationsOnHomePage,
+                            isUserComingFromHomePage: false,
+                            isUserComingFromJoinPage: true,
+                            isUserComingFromRoomPage: false,
+                        },
                     });
                 }}
             >
@@ -98,6 +121,7 @@ const JoinHeader = (props) => {
                     <RoomNameAndHostText
                         roomName={props.roomName}
                         hostName={props.hostName}
+                        userName={props.userName}
                     />
                 </Content>
             </HeaderContainer>

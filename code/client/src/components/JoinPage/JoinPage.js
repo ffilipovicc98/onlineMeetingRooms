@@ -7,11 +7,13 @@ import SimpleButton from '../SimpleButton/SimpleButton';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import RoomNameAndHostText from '../RoomNameAndHostText/RoomNameAndHostText';
 import JoinHeader from '../JoinHeader/JoinHeader';
+import MeetingSettings from '../MeetingSettings/MeetingSettings';
 
 const StyledJoinPage = styled.div`
     height: 100%;
     width: 100%;
     background: url(${JoinPageBackground}) center #fff;
+    /* background-size: 120% 120%; */
 
     /* flex properties as parent */
 `;
@@ -21,7 +23,7 @@ const Row = styled.div`
 
     width: 95%;
     position: absolute;
-    top: 240px;
+    top: 220px;
 
     display: flex;
     justify-content: space-between;
@@ -57,18 +59,26 @@ const MeetingSettingsHalf = styled.div`
 
 const JoinPage = ({ location, match }) => {
     const history = useHistory();
-    const roomName = location.state.roomName;
-    const hostName = location.state.hostName;
-
+    const { roomName, hostName } = location.state;
+    const [userNameInputValue, setUserNameInputValue] = useState('');
     return (
         <StyledJoinPage>
-            <JoinHeader roomName={roomName} hostName={hostName} />
+            <JoinHeader
+                roomName={roomName}
+                hostName={hostName}
+                userName={userNameInputValue}
+            />
             <Row>
                 <SvgIconHalf>
                     <JoinPageSvgIcon />
                 </SvgIconHalf>
                 <MeetingSettingsHalf>
-                    <MeetingSettings></MeetingSettings>
+                    <MeetingSettings
+                        roomName={roomName}
+                        hostName={hostName}
+                        userName={userNameInputValue}
+                        setUserName={setUserNameInputValue}
+                    />
                 </MeetingSettingsHalf>
             </Row>
         </StyledJoinPage>
@@ -80,33 +90,6 @@ const JoinPage = ({ location, match }) => {
 /************************************************************************/
 
 /************************************************************************/
-
-const Container = styled.div`
-    background-color: #f9f9f9;
-
-    width: 1000px;
-    height: 650px;
-
-    overflow: hidden;
-    border-radius: 7px;
-    border: solid 1px #3182ce;
-    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
-`;
-
-const VideoPreview = styled.div`
-    background-color: #444;
-
-    width: 100%;
-    height: 85%;
-`;
-
-const MeetingSettings = () => {
-    return (
-        <Container>
-            <VideoPreview />
-        </Container>
-    );
-};
 
 {
     /* <h1>Joining room {roomName}</h1>

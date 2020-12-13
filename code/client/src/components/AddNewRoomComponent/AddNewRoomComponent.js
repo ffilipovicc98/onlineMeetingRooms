@@ -252,7 +252,13 @@ const AddNewRoomComponent = () => {
                                 pathname: `/join`,
                                 state: {
                                     roomName: roomNameInputValue,
-                                    hostName: 'You',
+                                    hostName: undefined,
+                                    userName: undefined,
+                                    isUserHost: true,
+                                    isUserSeeAnimationsOnHomePage: true,
+                                    isUserComingFromHomePage: true,
+                                    isUserComingFromJoinPage: false,
+                                    isUserComingFromRoomPage: false,
                                 },
                             });
                         }}

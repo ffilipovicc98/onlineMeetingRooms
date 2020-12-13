@@ -19,6 +19,10 @@ const SipleStyledButton = styled(motion.button)`
     :hover {
         cursor: pointer;
     }
+
+    :focus {
+        border: none;
+    }
 `;
 
 const SimpleButton = (props) => {

@@ -20,7 +20,18 @@ const RoomPage = ({ location }) => {
                 onClick={() =>
                     history.push({
                         pathname: '/',
-                        state: { roomName: roomName },
+                        state: {
+                            roomName: undefined,
+                            hostName: undefined,
+                            userName: undefined,
+                            isUserHost: undefined,
+                            isUserSeeAnimationsOnHomePage:
+                                history.location.state
+                                    .isUserSeeAnimationsOnHomePage,
+                            isUserComingFromHomePage: false,
+                            isUserComingFromJoinPage: false,
+                            isUserComingFromRoomPage: true,
+                        },
                     })
                 }
             >

@@ -11,6 +11,8 @@ import { BsPlus } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import VideoGrid from '../VideoGrid/VideoGrid';
 import CircleNameInitials from '../CircleNameInitials/CircleNameInitials';
+import SectionWithBoxAndTextOver from '../SectionWithBoxAndTextOver/SectionWithBoxAndTextOver';
+import Chat from '../Chat/Chat';
 
 const StyledRoomPage = styled.div`
     --right_part_width: 450px;
@@ -92,50 +94,6 @@ const IconSpan = styled.span`
     align-items: center;
 `;
 
-const OnlinePeopleSection = styled.section`
-    /* border: 5px solid #677aaa; */
-
-    width: 100%;
-    height: 400px;
-`;
-
-const StyledH1 = styled.h1`
-    color: #2b517f;
-    padding-left: 25px;
-
-    width: 100%;
-    height: 7%;
-
-    font-size: 1.5em;
-    font-weight: 300;
-`;
-
-const PeopleWrapper = styled.div`
-    /* border: solid 5px green; */
-    width: 100%;
-    height: 93%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const PeopleContainer = styled.div`
-    background-color: #fff;
-    /* border: solid 1px #3182cb; */
-    border-radius: 5px;
-
-    box-shadow: -2px 2px 3px 2px rgba(0, 0, 0, 0.2);
-
-    width: 95%;
-    height: 95%;
-
-    /* display: flex; */
-    padding: 0px 20px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-`;
-
 const UserElementContainer = styled(motion.div)`
     /* border: solid 3px paleturquoise; */
     margin: 15px 0;
@@ -170,20 +128,20 @@ const RoomPage = ({ location }) => {
     const people = [
         { userName: userName, userID: 1 },
         { userName: hostName, userID: 2 },
-        { userName: 'Petar Mitic', userID: 3 },
-        { userName: 'Miskovic Milenko', userID: 4 },
-        { userName: 'goxxy92', userID: 5 },
-        { userName: 'Ana Peric', userID: 6 },
-        { userName: 'Dragana Perisic', userID: 7 },
-        { userName: 'Mitrovic Petar', userID: 8 },
-        { userName: 'Dunja Dunjic', userID: 9 },
-        { userName: 'Marija Okanovic', userID: 10 },
-        { userName: 'Stanko Stanic', userID: 11 },
-        { userName: 'Filip Tasic', userID: 12 },
-        { userName: 'Mirkovic', userID: 13 },
-        { userName: 'Marko Markovic Mare', userID: 14 },
-        { userName: 'Petar Mitic', userID: 15 },
-        { userName: 'Milica Milic', userID: 16 },
+        // { userName: 'Petar Mitic', userID: 3 },
+        // { userName: 'Miskovic Milenko', userID: 4 },
+        // { userName: 'goxxy92', userID: 5 },
+        // { userName: 'Ana Peric', userID: 6 },
+        // { userName: 'Dragana Perisic', userID: 7 },
+        // { userName: 'Mitrovic Petar', userID: 8 },
+        // { userName: 'Dunja Dunjic', userID: 9 },
+        // { userName: 'Marija Okanovic', userID: 10 },
+        // { userName: 'Stanko Stanic', userID: 11 },
+        // { userName: 'Filip Tasic', userID: 12 },
+        // { userName: 'Mirkovic', userID: 13 },
+        // { userName: 'Marko Markovic Mare', userID: 14 },
+        // { userName: 'Petar Mitic', userID: 15 },
+        // { userName: 'Milica Milic', userID: 16 },
     ];
 
     return (
@@ -252,42 +210,55 @@ const RoomPage = ({ location }) => {
                         </CircleButton>
                     </ButtonsBox>
                 </ButtonsSection>
-                <OnlinePeopleSection>
-                    <StyledH1>Online People</StyledH1>
-                    <PeopleWrapper>
-                        <PeopleContainer>
-                            {people.map((user) => (
-                                <UserElementContainer
-                                    key={user.userID}
-                                    whileHover={{
-                                        // scale: 1.03,
-                                        scale: 0.97,
-                                        transition: {
-                                            type: 'spring',
-                                            bounce: 0.7,
-                                            duration: 0.5,
-                                        },
-                                    }}
-                                    whileTap={{ scale: 0.94 }}
-                                    drag='x'
-                                    dragConstraints={{ left: 0, right: 0 }}
-                                    dragElastic={0.1}
-                                >
-                                    <CircleNameInitials name={user.userName} />
-                                    <UserElementText>
-                                        {user.userName}
-                                    </UserElementText>
-                                </UserElementContainer>
-                            ))}
-                        </PeopleContainer>
-                    </PeopleWrapper>
-                </OnlinePeopleSection>
+                <SectionWithBoxAndTextOver
+                    textOver='Online People'
+                    sectionWidth='100%'
+                    sectionHeight='400px'
+                >
+                    {people.map((user) => (
+                        <UserElementContainer
+                            key={user.userID}
+                            whileHover={{
+                                // scale: 1.03,
+                                scale: 0.97,
+                                transition: {
+                                    type: 'spring',
+                                    bounce: 0.7,
+                                    duration: 0.5,
+                                },
+                            }}
+                            whileTap={{ scale: 0.94 }}
+                            drag='x'
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={0.1}
+                        >
+                            <CircleNameInitials name={user.userName} />
+                            <UserElementText>{user.userName}</UserElementText>
+                        </UserElementContainer>
+                    ))}
+                </SectionWithBoxAndTextOver>
+                <SectionWithBoxAndTextOver
+                    textOver='Chat'
+                    sectionWidth='100%'
+                    sectionHeight='450px'
+                >
+                    <Chat />
+                </SectionWithBoxAndTextOver>
             </RightPart>
         </StyledRoomPage>
     );
 };
 
 /*******************************************************************/
+
+/*******************************************************************/
+
+const ChatSection = styled.section`
+    background-color: orange;
+    opacity: 0.5;
+    width: 100%;
+    height: 400px;
+`;
 
 export default RoomPage;
 

@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
-import {
-    PageAnimationsProvider,
-    usePageAnimations,
-} from './components/PageAnimationsContext/PageAnimationsContext';
+
+import rootReducer from './reducers';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+const store = createStore(
+    rootReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 const GlobalStyle = createGlobalStyle`
     *,
@@ -41,9 +46,9 @@ ReactDOM.render(
     <React.StrictMode>
         <GlobalStyle />
         <Router>
-            <PageAnimationsProvider>
+            <Provider store={store}>
                 <App />
-            </PageAnimationsProvider>
+            </Provider>
         </Router>
     </React.StrictMode>,
     document.getElementById('root')

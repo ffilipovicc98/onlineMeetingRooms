@@ -10,6 +10,12 @@ import {
 } from 'react-icons/bs';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import StateButton from '../StateButton/StateButton';
+import { useDispatch } from 'react-redux';
+import {
+    setHostName,
+    setIsUserComingFromJoinPage,
+    setUserName,
+} from './../../actions';
 
 const Container = styled.div`
     --container_width: 1000px;
@@ -85,7 +91,9 @@ const IconSpan = styled.span`
 
 const MeetingSettings = (props) => {
     const history = useHistory();
-    const { roomName, hostName, userName, setUserName } = props;
+    const { roomName, hostName, userName, setUserNameInputValue } = props;
+
+    const dispatch = useDispatch();
     return (
         <Container>
             <VideoPreview />
@@ -100,7 +108,7 @@ const MeetingSettings = (props) => {
                         textOverInput='Your Name'
                         textOverInputSize='.85em'
                         onChangeCallback={(event) => {
-                            setUserName(event.currentTarget.value);
+                            setUserNameInputValue(event.currentTarget.value);
                         }}
                     />
 
@@ -146,21 +154,11 @@ const MeetingSettings = (props) => {
                         buttonWidth='80px'
                         buttonHeight='var(--buttons_and_input_height)'
                         onClickCallback={() => {
+                            dispatch(setIsUserComingFromJoinPage(true));
+                            dispatch(setUserName(userName));
+                            dispatch(setHostName(hostName));
                             history.push({
                                 pathname: `/rooms/${'asd'}`,
-                                state: {
-                                    roomName,
-                                    userName,
-                                    hostName,
-                                    isUserHost:
-                                        history.location.state.isUserHost,
-                                    isUserSeeAnimationsOnHomePage:
-                                        history.location
-                                            .isUserSeeAnimationsOnHomePage,
-                                    isUserComingFromHomePage: false,
-                                    isUserComingFromJoinPage: true,
-                                    isUserComingFromRoomPage: false,
-                                },
                             });
                         }}
                     >

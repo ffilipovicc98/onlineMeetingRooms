@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomePageSvgIcon from '../HomePageSvgIcon/HomePageSvgIcon';
 import AvailibaleRooms from '../AvailibaleRooms/AvailibaleRooms';
 import AddNewRoomComponent from '../AddNewRoomComponent/AddNewRoomComponent';
 import styled from 'styled-components';
 import HomePageBackground from './HomePageBackground.svg';
 import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    resetHomePageAnimations,
+    setIsUserSawAnimationsOnHomePage,
+    slideRightHomePageOnEnter,
+} from './../../actions';
+import { useLocation } from 'react-router-dom';
 
 const StyledHomePage = styled(motion.div)`
     height: 100%;
@@ -75,6 +82,29 @@ const variantsOfSvgIconHalf = {
 };
 
 const HomePage = () => {
+    let location = useLocation();
+    const userPageHistory = useSelector(
+        (state) => state.userPageHistoryReducer,
+        () => true // prevent rerender on updates of state.userPageHistoryReducer
+    );
+    const pageAnimations = useSelector(
+        (state) => state.pageAnimationsReducer,
+        () => true
+    );
+    const dispatch = useDispatch();
+
+    if (
+        // location.pathname === '/' &&
+        userPageHistory.isUserComingFromJoinPage ||
+        userPageHistory.isUserComingFromRoomPage
+    ) {
+        dispatch(slideRightHomePageOnEnter());
+    }
+
+    useEffect(() => {
+        dispatch(setIsUserSawAnimationsOnHomePage(true));
+    }, []);
+
     return (
         <StyledHomePage variants={variantsOfStyledHomePage}>
             <AddNewRoomComponent />

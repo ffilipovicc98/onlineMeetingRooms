@@ -8,6 +8,8 @@ import { BsArrowLeftShort } from 'react-icons/bs';
 import RoomNameAndHostText from '../RoomNameAndHostText/RoomNameAndHostText';
 import JoinHeader from '../JoinHeader/JoinHeader';
 import MeetingSettings from '../MeetingSettings/MeetingSettings';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetJoinPageAnimations } from '../../actions';
 
 const StyledJoinPage = styled.div`
     height: 100%;
@@ -57,9 +59,11 @@ const MeetingSettingsHalf = styled.div`
     align-items: center;
 `;
 
-const JoinPage = ({ location, match }) => {
-    const history = useHistory();
-    const { roomName, hostName } = location.state;
+const JoinPage = () => {
+    const currentUser = useSelector((state) => state.currentUserReducer);
+    const { roomName, hostName } = currentUser;
+    const dispatch = useDispatch();
+    // dispatch(resetJoinPageAnimations());
     const [userNameInputValue, setUserNameInputValue] = useState('');
     return (
         <StyledJoinPage>
@@ -77,7 +81,7 @@ const JoinPage = ({ location, match }) => {
                         roomName={roomName}
                         hostName={hostName}
                         userName={userNameInputValue}
-                        setUserName={setUserNameInputValue}
+                        setUserNameInputValue={setUserNameInputValue}
                     />
                 </MeetingSettingsHalf>
             </Row>

@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import SimpleButton from '../SimpleButton/SimpleButton';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import RoomNameAndHostText from '../RoomNameAndHostText/RoomNameAndHostText';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    resetJoinPageAnimations,
+    slideRightJoinPageOnExit,
+    slideRightHomePageOnEnter,
+    setIsUserComingFromJoinPage,
+} from '../../actions';
 
 const Header = styled.header`
     --header_height: 150px;
@@ -71,9 +78,7 @@ const Content = styled.div`
 
 const JoinHeader = (props) => {
     const history = useHistory();
-    // const variantsForAnimatingPages = useContext(
-    //     variantsForAnimatingPagesContext
-    // );
+    const dispatch = useDispatch();
     return (
         <Header>
             <BackButton
@@ -85,30 +90,13 @@ const JoinHeader = (props) => {
                 borderBottomLeftRadius='0px'
                 borderBottomRightRadius='0px'
                 onClickCallback={() => {
-                    // variantsForAnimatingPages.exitState = {
-                    //     x: '100vw',
-                    //     transition: {
-                    //         type: 'spring',
-                    //         bounce: 0,
-                    //         duration: 1,
-                    //         restDelta: 0.005,
-                    //     },
-                    // };
-                    history.push({
-                        pathname: `/`,
-                        state: {
-                            roomName: undefined,
-                            hostName: undefined,
-                            userName: undefined,
-                            isUserHost: undefined,
-                            isUserSeeAnimationsOnHomePage:
-                                history.location
-                                    .stateisUserSeeAnimationsOnHomePage,
-                            isUserComingFromHomePage: false,
-                            isUserComingFromJoinPage: true,
-                            isUserComingFromRoomPage: false,
-                        },
-                    });
+                    const wait = (timeInMS = 0) =>
+                        new Promise((resolve) => setTimeout(resolve, timeInMS));
+                    dispatch(setIsUserComingFromJoinPage(true));
+                    dispatch(slideRightHomePageOnEnter());
+                    dispatch(slideRightJoinPageOnExit());
+                    // wait(3000).then(() => {});
+                    history.push({ pathname: `/` });
                 }}
             >
                 <IconSpan>

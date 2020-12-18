@@ -18,6 +18,9 @@ const Circle = styled.div`
 `;
 
 const getInitials = (name) => {
+    if (name === undefined) {
+        return 'XX';
+    }
     if (name === '') {
         return name;
     }

@@ -3,6 +3,18 @@ import { motion } from 'framer-motion';
 import SimpleButton from '../SimpleButton/SimpleButton';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    reset,
+    delete_exit,
+    setIsUserComingFromHomePage,
+    setIsUserComingFromJoinPage,
+    setIsUserComingFromRoomPage,
+    setIsUserComingFromInvalidPage,
+    setIsUserComingFromUrl,
+    setRoomName,
+    setHostName,
+} from '../../actions';
 
 const StyledListElement = styled(motion.div)`
     /* background: rgb(165, 91, 91); */
@@ -80,6 +92,7 @@ const ButtonSection = styled.section`
 
 const AvailibaleRoomsListElement = ({ roomID, roomName, hostName }) => {
     const history = useHistory();
+    const dispatch = useDispatch();
     return (
         <StyledListElement key={roomID} variants={variantsOfStyledListElement}>
             <StyledLeftLineSection />
@@ -95,19 +108,10 @@ const AvailibaleRoomsListElement = ({ roomID, roomName, hostName }) => {
                     buttonHeight='43%'
                     fontSize='0.8em'
                     onClickCallback={() => {
-                        history.push({
-                            pathname: `/join`,
-                            state: {
-                                roomName,
-                                hostName,
-                                userName: undefined,
-                                isUserHost: false,
-                                isUserSeeAnimationsOnHomePage: true,
-                                isUserComingFromHomePage: true,
-                                isUserComingFromJoinPage: false,
-                                isUserComingFromRoomPage: false,
-                            },
-                        });
+                        dispatch(setIsUserComingFromHomePage(true));
+                        dispatch(setRoomName(roomName));
+                        dispatch(setHostName(hostName));
+                        history.push({ pathname: `/join` });
                     }}
                 >
                     Join

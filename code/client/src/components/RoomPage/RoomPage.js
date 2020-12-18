@@ -13,6 +13,13 @@ import VideoGrid from '../VideoGrid/VideoGrid';
 import CircleNameInitials from '../CircleNameInitials/CircleNameInitials';
 import SectionWithBoxAndTextOver from '../SectionWithBoxAndTextOver/SectionWithBoxAndTextOver';
 import Chat from '../Chat/Chat';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setIsUserComingFromRoomPage,
+    resetRoomPageAnimations,
+    slideRightRoomPageOnExit,
+    slideRightHomePageOnEnter,
+} from './../../actions';
 
 const StyledRoomPage = styled.div`
     --right_part_width: 450px;
@@ -121,25 +128,31 @@ const UserElementText = styled.p`
     padding-left: 10px;
 `;
 
-const RoomPage = ({ location }) => {
-    const { userName, roomName, hostName } = location.state;
+const RoomPage = () => {
+    const currentUser = useSelector((state) => state.currentUserReducer);
+
+    const { userName, roomName, hostName } = currentUser;
+
     const history = useHistory();
+
+    const dispatch = useDispatch();
+    // dispatch(resetRoomPageAnimations());
 
     const people = [
         { userName: userName, userID: 1 },
         { userName: hostName, userID: 2 },
-        // { userName: 'Petar Mitic', userID: 3 },
-        // { userName: 'Miskovic Milenko', userID: 4 },
-        // { userName: 'goxxy92', userID: 5 },
-        // { userName: 'Ana Peric', userID: 6 },
-        // { userName: 'Dragana Perisic', userID: 7 },
-        // { userName: 'Mitrovic Petar', userID: 8 },
-        // { userName: 'Dunja Dunjic', userID: 9 },
-        // { userName: 'Marija Okanovic', userID: 10 },
-        // { userName: 'Stanko Stanic', userID: 11 },
-        // { userName: 'Filip Tasic', userID: 12 },
-        // { userName: 'Mirkovic', userID: 13 },
-        // { userName: 'Marko Markovic Mare', userID: 14 },
+        { userName: 'Petar Mitic', userID: 3 },
+        { userName: 'Miskovic Milenko', userID: 4 },
+        { userName: 'goxxy92', userID: 5 },
+        { userName: 'Ana Peric', userID: 6 },
+        { userName: 'Dragana Perisic', userID: 7 },
+        { userName: 'Mitrovic Petar', userID: 8 },
+        { userName: 'Dunja Dunjic', userID: 9 },
+        { userName: 'Marija Okanovic', userID: 10 },
+        { userName: 'Stanko Stanic', userID: 11 },
+        { userName: 'Filip Tasic', userID: 12 },
+        { userName: 'Mirkovic', userID: 13 },
+        { userName: 'Marko Markovic Mare', userID: 14 },
         // { userName: 'Petar Mitic', userID: 15 },
         // { userName: 'Milica Milic', userID: 16 },
     ];
@@ -203,6 +216,12 @@ const RoomPage = ({ location }) => {
                             buttonWidth='40px'
                             buttonHeight='40px'
                             backgroundColor='#ef5350'
+                            onClickCallback={() => {
+                                dispatch(setIsUserComingFromRoomPage(true));
+                                dispatch(slideRightRoomPageOnExit());
+                                dispatch(slideRightHomePageOnEnter());
+                                history.push({ pathname: '/' });
+                            }}
                         >
                             <IconSpan>
                                 <BsPlus />

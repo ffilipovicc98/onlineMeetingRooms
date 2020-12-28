@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -28,13 +29,16 @@ const RoomNameAndHostText = (props) => {
         roomNameFontWeight,
     } = props;
     const propsToPass = { className, width, height };
+    const currentUser = useSelector((state) => state.currentUserReducer);
     return (
         <Wrapper {...propsToPass} className={className}>
-            <RoomNameText>{props.roomName}</RoomNameText>
+            <RoomNameText>{currentUser.roomName}</RoomNameText>
             <HostNameText>
                 Host:{' '}
                 <span style={{ fontStyle: 'italic' }}>
-                    {props.hostName ? props.hostName : props.userName}
+                    {currentUser.isCurrentUserHost
+                        ? currentUser.userName
+                        : currentUser.hostName}
                 </span>
             </HostNameText>
         </Wrapper>

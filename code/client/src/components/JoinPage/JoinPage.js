@@ -60,29 +60,15 @@ const MeetingSettingsHalf = styled.div`
 `;
 
 const JoinPage = () => {
-    const currentUser = useSelector((state) => state.currentUserReducer);
-    const { roomName, hostName } = currentUser;
-    const dispatch = useDispatch();
-    // dispatch(resetJoinPageAnimations());
-    const [userNameInputValue, setUserNameInputValue] = useState('');
     return (
         <StyledJoinPage>
-            <JoinHeader
-                roomName={roomName}
-                hostName={hostName}
-                userName={userNameInputValue}
-            />
+            <JoinHeader />
             <Row>
                 <SvgIconHalf>
                     <JoinPageSvgIcon />
                 </SvgIconHalf>
                 <MeetingSettingsHalf>
-                    <MeetingSettings
-                        roomName={roomName}
-                        hostName={hostName}
-                        userName={userNameInputValue}
-                        setUserNameInputValue={setUserNameInputValue}
-                    />
+                    <MeetingSettings />
                 </MeetingSettingsHalf>
             </Row>
         </StyledJoinPage>

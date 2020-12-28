@@ -24,8 +24,21 @@ import {
     setIsUserComingFromInvalidPage,
     setIsUserComingFromUrl,
     setRoomName,
+    setUserSocket,
+    roomReducerSetRoomName,
+    roomReducerSetRoomID,
+    roomReducerSetHostName,
+    roomReducerSetMessagesOnJoin,
+    roomReducerSetUsersOnJoin,
+    setHostName,
+    setRoomID,
+    roomReducerAddUser,
+    roomReducerRemoveUser,
+    roomReducerAddMessage,
 } from './actions';
 import { useSelector, useDispatch } from 'react-redux';
+import io from 'socket.io-client';
+import roomReducer from './reducers/roomReducer';
 
 const springType = {
     type: 'spring',
@@ -88,10 +101,20 @@ const shouldRedirectToJoinPage = (
         isUserComingFromPageWhichDidntSetStateRoomName;
     // debugger;
     if (shouldRedirectToJoinPage) {
-        const roomName = pom[2];
-        dispatch(setRoomName(roomName));
+        const roomID = pom[2];
+        fetch(`http://localhost:5000/rooms/${roomID}`)
+            .then((response) => response.json())
+            .then(({ roomName, hostName }) => {
+                dispatch(setRoomName(roomName));
+                dispatch(setHostName(hostName));
+                dispatch(setRoomID(roomID));
+                history.push({ pathname: '/join' });
+            })
+            .catch((err) => {
+                throw new Error('Greska shouldRedirectToJoinPage');
+            });
         dispatch(setIsUserComingFromUrl(true));
-        history.push({ pathname: '/join' });
+        // history.push({ pathname: '/join' });
     }
     return shouldRedirectToJoinPage;
 };
@@ -113,27 +136,45 @@ const App = () => {
     );
     const dispatch = useDispatch();
 
-    // // if HomePage is loading for the first time
-    // if (
-    //     location.pathname === '/' &&
-    //     !location.state?.isUserSeeAnimationsOnHomePage
-    // ) {
-    //     pageAnimationsContextObject.setVariantsForFirstVisit();
-    // }
+    useEffect(() => {
+        console.log('useEffect');
+        const socket = io('http://localhost:5000/');
 
-    // // If user is on '/rooms/:roomName' page, slide left on exit
-    // if (location.pathname.split('/')[1] === 'rooms') {
-    //     pageAnimationsContextObject.setVariantsForSlidingLeftExit();
-    // }
+        socket.on('roomInfoOnJoin', (room) => {
+            console.log(room);
+            dispatch(roomReducerSetRoomName(room.roomName));
+            dispatch(roomReducerSetRoomID(room.roomID));
+            dispatch(roomReducerSetHostName(room.hostName));
+            dispatch(roomReducerSetMessagesOnJoin(room.messages));
+            dispatch(roomReducerSetUsersOnJoin(room.users));
+        });
 
-    // // if user is transitioning from '/rooms/:roomName' page to '/' page
-    // if (
-    //     location.pathname === '/' &&
-    //     (userPageHistory.isUserComingFromJoinPage ||
-    //         userPageHistory.isUserComingFromRoomPage)
-    // ) {
-    //     dispatch(slideRightOnEnter());
-    // }
+        socket.on('newUser', (user) => {
+            const { userName, userID, isHost } = user;
+            dispatch(roomReducerAddUser(user));
+        });
+
+        socket.on('userLeft', (user) => {
+            const { userName, userID, isHost } = user;
+            dispatch(roomReducerRemoveUser(user));
+        });
+
+        socket.on('meetingEnded', () => {
+            alert('Meeting ended!');
+        });
+
+        socket.on('sendMessageToUsersInRoom', (message) => {
+            dispatch(roomReducerAddMessage(message));
+        });
+
+        dispatch(setUserSocket(socket));
+
+        return () => {
+            // currentUser.socket.emit('disconnect');
+            currentUser.socket.off();
+        };
+    }, []);
+
     shouldRedirectToHomePage(location, history, currentUser, dispatch);
     shouldRedirectToJoinPage(location, history, currentUser, dispatch);
     return (

@@ -70,6 +70,11 @@ export const setRoomName = (value) => ({
     payload: value,
 });
 
+export const setRoomID = (value) => ({
+    type: 'SET_ROOM_ID',
+    payload: value,
+});
+
 export const setHostName = (value) => ({
     type: 'SET_HOST_NAME',
     payload: value,
@@ -77,5 +82,73 @@ export const setHostName = (value) => ({
 
 export const setIsCurrentUserHost = (value) => ({
     type: 'SET_IS_CURRENT_USER_HOST',
+    payload: value,
+});
+
+export const setUserSocket = (value) => ({
+    type: 'SET_USER_SOCKET',
+    payload: value,
+});
+
+export const resetCurrentUser = () => ({
+    type: 'RESET_CURRENT_USER',
+});
+
+// availibaleRooms
+
+export const setCurrentPage = (value) => ({
+    type: 'SET_CURRENT_PAGE',
+    payload: value,
+});
+
+// roomReducer
+
+export const roomReducerSetRoomID = (value) => ({
+    type: 'ROOM_REDUCER_SET_ROOM_ID',
+    payload: value,
+});
+
+export const roomReducerSetRoomName = (value) => ({
+    type: 'ROOM_REDUCER_SET_ROOM_NAME',
+    payload: value,
+});
+
+export const roomReducerSetHostName = (value) => ({
+    type: 'ROOM_REDUCER_SET_HOST_NAME',
+    payload: value,
+});
+
+export const roomReducerSetUsersOnJoin = (value) => ({
+    type: 'ROOM_REDUCER_SET_USERS_ON_JOIN',
+    payload: value,
+});
+
+export const roomReducerAddUser = (value) => ({
+    type: 'ROOM_REDUCER_ADD_USER',
+    payload: value,
+});
+
+export const roomReducerRemoveUser = (value) => ({
+    type: 'ROOM_REDUCER_REMOVE_USER',
+    payload: value,
+});
+
+export const roomReducerSetMessagesOnJoin = (value) => ({
+    type: 'ROOM_REDUCER_SET_MESSAGES_ON_JOIN',
+    payload: value,
+});
+
+export const roomReducerAddMessage = (value) => ({
+    type: 'ROOM_REDUCER_ADD_MESSAGE',
+    payload: value,
+});
+
+export const roomReducerSetMessageContent = (value) => ({
+    type: 'ROOM_REDUCER_SET_MESSAGE_CONTENT',
+    payload: value,
+});
+
+export const roomReducerReset = (value) => ({
+    type: 'ROOM_REDUCER_RESET',
     payload: value,
 });

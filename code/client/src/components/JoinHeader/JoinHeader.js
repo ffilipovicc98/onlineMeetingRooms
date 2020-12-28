@@ -10,6 +10,7 @@ import {
     slideRightJoinPageOnExit,
     slideRightHomePageOnEnter,
     setIsUserComingFromJoinPage,
+    resetCurrentUser,
 } from '../../actions';
 
 const Header = styled.header`
@@ -76,7 +77,7 @@ const Content = styled.div`
     align-items: center;
 `;
 
-const JoinHeader = (props) => {
+const JoinHeader = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     return (
@@ -90,12 +91,10 @@ const JoinHeader = (props) => {
                 borderBottomLeftRadius='0px'
                 borderBottomRightRadius='0px'
                 onClickCallback={() => {
-                    const wait = (timeInMS = 0) =>
-                        new Promise((resolve) => setTimeout(resolve, timeInMS));
                     dispatch(setIsUserComingFromJoinPage(true));
                     dispatch(slideRightHomePageOnEnter());
                     dispatch(slideRightJoinPageOnExit());
-                    // wait(3000).then(() => {});
+                    dispatch(resetCurrentUser());
                     history.push({ pathname: `/` });
                 }}
             >
@@ -106,11 +105,7 @@ const JoinHeader = (props) => {
             </BackButton>
             <HeaderContainer>
                 <Content>
-                    <RoomNameAndHostText
-                        roomName={props.roomName}
-                        hostName={props.hostName}
-                        userName={props.userName}
-                    />
+                    <RoomNameAndHostText />
                 </Content>
             </HeaderContainer>
         </Header>

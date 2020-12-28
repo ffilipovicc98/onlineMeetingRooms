@@ -53,6 +53,8 @@ const Message = (props) => {
         userName,
         isCurrentUser,
         content,
+        hours,
+        minutes,
         time,
         userNameFontSize,
         userNameFontWeight,
@@ -84,6 +86,7 @@ const Message = (props) => {
                     </Name>
                 )}
                 <Content>{content}</Content>
+                {/* <Time>{`${hours}:${minutes}`}</Time> */}
                 <Time>{time}</Time>
             </Box>
         </Row>

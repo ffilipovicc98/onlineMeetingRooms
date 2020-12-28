@@ -6,10 +6,11 @@ import { motion, useAnimation } from 'framer-motion';
 import InputBox from '../InputBox/InputBox';
 import SimpleButton from '../SimpleButton/SimpleButton';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     setIsCurrentUserHost,
     setIsUserComingFromHomePage,
+    setRoomID,
     setRoomName,
     setUserName,
 } from '../../actions';
@@ -217,6 +218,7 @@ const AddNewRoomComponent = () => {
     const history = useHistory();
 
     const dispatch = useDispatch();
+    const socket = useSelector((state) => state.currentUserReducer.socket);
     return (
         <AddNewRoomDiv>
             <AddNewRoomButton
@@ -259,7 +261,7 @@ const AddNewRoomComponent = () => {
                             dispatch(setRoomName(roomNameInputValue));
                             dispatch(setIsUserComingFromHomePage(true));
                             dispatch(setIsCurrentUserHost(true));
-                            dispatch(setUserName(undefined));
+                            dispatch(setRoomID(socket.id));
                             history.push({ pathname: `/join` });
                         }}
                         variants={variantsOfSimpleButton}

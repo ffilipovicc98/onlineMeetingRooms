@@ -19,7 +19,9 @@ import {
     resetRoomPageAnimations,
     slideRightRoomPageOnExit,
     slideRightHomePageOnEnter,
+    resetCurrentUser,
 } from './../../actions';
+import currentUserReducer from '../../reducers/currentUserReducer';
 
 const StyledRoomPage = styled.div`
     --right_part_width: 450px;
@@ -130,42 +132,37 @@ const UserElementText = styled.p`
 
 const RoomPage = () => {
     const currentUser = useSelector((state) => state.currentUserReducer);
-
-    const { userName, roomName, hostName } = currentUser;
+    const roomReducer = useSelector((state) => state.roomReducer);
 
     const history = useHistory();
 
     const dispatch = useDispatch();
-    // dispatch(resetRoomPageAnimations());
+    const users = roomReducer.users ? roomReducer.users : [];
 
-    const people = [
-        { userName: userName, userID: 1 },
-        { userName: hostName, userID: 2 },
-        { userName: 'Petar Mitic', userID: 3 },
-        { userName: 'Miskovic Milenko', userID: 4 },
-        { userName: 'goxxy92', userID: 5 },
-        { userName: 'Ana Peric', userID: 6 },
-        { userName: 'Dragana Perisic', userID: 7 },
-        { userName: 'Mitrovic Petar', userID: 8 },
-        { userName: 'Dunja Dunjic', userID: 9 },
-        { userName: 'Marija Okanovic', userID: 10 },
-        { userName: 'Stanko Stanic', userID: 11 },
-        { userName: 'Filip Tasic', userID: 12 },
-        { userName: 'Mirkovic', userID: 13 },
-        { userName: 'Marko Markovic Mare', userID: 14 },
-        // { userName: 'Petar Mitic', userID: 15 },
-        // { userName: 'Milica Milic', userID: 16 },
-    ];
+    // const people = [
+    // { userName: userName, userID: 1 },
+    // { userName: hostName, userID: 2 },
+    // { userName: 'Petar Mitic', userID: 3 },
+    // { userName: 'Miskovic Milenko', userID: 4 },
+    // { userName: 'goxxy92', userID: 5 },
+    // { userName: 'Ana Peric', userID: 6 },
+    // { userName: 'Dragana Perisic', userID: 7 },
+    // { userName: 'Mitrovic Petar', userID: 8 },
+    // { userName: 'Dunja Dunjic', userID: 9 },
+    // { userName: 'Marija Okanovic', userID: 10 },
+    // { userName: 'Stanko Stanic', userID: 11 },
+    // { userName: 'Filip Tasic', userID: 12 },
+    // { userName: 'Mirkovic', userID: 13 },
+    // { userName: 'Marko Markovic Mare', userID: 14 },
+    // { userName: 'Petar Mitic', userID: 15 },
+    // { userName: 'Milica Milic', userID: 16 },
+    // ];
 
     return (
         <StyledRoomPage>
-            <StyledRoomNameAndHostText
-                roomName={roomName}
-                hostName={hostName}
-                userName={userName}
-            />
+            <StyledRoomNameAndHostText />
             <LeftPart>
-                <VideoGrid users={people} />
+                <VideoGrid users={users} />
             </LeftPart>
             <RightPart>
                 <ButtonsSection>
@@ -220,6 +217,8 @@ const RoomPage = () => {
                                 dispatch(setIsUserComingFromRoomPage(true));
                                 dispatch(slideRightRoomPageOnExit());
                                 dispatch(slideRightHomePageOnEnter());
+                                dispatch(resetCurrentUser());
+                                currentUser.socket.emit('leave');
                                 history.push({ pathname: '/' });
                             }}
                         >
@@ -234,7 +233,7 @@ const RoomPage = () => {
                     sectionWidth='100%'
                     sectionHeight='400px'
                 >
-                    {people.map((user) => (
+                    {users.map((user) => (
                         <UserElementContainer
                             key={user.userID}
                             whileHover={{

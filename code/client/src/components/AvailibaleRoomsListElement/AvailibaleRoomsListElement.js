@@ -14,6 +14,7 @@ import {
     setIsUserComingFromUrl,
     setRoomName,
     setHostName,
+    setIsCurrentUserHost,
 } from '../../actions';
 
 const StyledListElement = styled(motion.div)`
@@ -108,10 +109,7 @@ const AvailibaleRoomsListElement = ({ roomID, roomName, hostName }) => {
                     buttonHeight='43%'
                     fontSize='0.8em'
                     onClickCallback={() => {
-                        dispatch(setIsUserComingFromHomePage(true));
-                        dispatch(setRoomName(roomName));
-                        dispatch(setHostName(hostName));
-                        history.push({ pathname: `/join` });
+                        history.push({ pathname: `/rooms/${roomID}` });
                     }}
                 >
                     Join

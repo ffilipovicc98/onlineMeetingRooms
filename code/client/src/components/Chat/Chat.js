@@ -4,6 +4,11 @@ import SimpleButton from '../SimpleButton/SimpleButton';
 import { FaRegPaperPlane } from 'react-icons/fa';
 import InputBox from '../InputBox/InputBox';
 import Message from '../Message/Message';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    roomReducerAddMessage,
+    roomReducerSetMessageContent,
+} from '../../actions';
 
 const Wrapper = styled.div`
     --input_and_button_section_height: 75px;
@@ -56,51 +61,58 @@ const IconSpan = styled.span`
 `;
 
 const Chat = () => {
-    const messages = [
-        {
-            messageID: 1,
-            userName: 'Filip Filipovic',
-            isCurrentUser: true,
-            content: 'Hello everyone!!!',
-            time: '10:43',
-        },
-        {
-            messageID: 2,
-            userName: 'Wes Bos',
-            isCurrentUser: false,
-            content: 'Hi',
-            time: '10:43',
-        },
-        {
-            messageID: 3,
-            userName: 'Aleksandar Tatic',
-            isCurrentUser: false,
-            content: 'Heey! Welcome!',
-            time: '10:43',
-        },
-        {
-            messageID: 4,
-            userName: 'Pera',
-            isCurrentUser: false,
-            content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            time: '10:59',
-        },
-        {
-            messageID: 5,
-            userName: 'Fica',
-            isCurrentUser: true,
-            content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            time: '10:59',
-        },
-    ];
+    const roomReducer = useSelector((state) => state.roomReducer);
+    const currentUserReducer = useSelector((state) => state.currentUserReducer);
+    const dispatch = useDispatch();
+    const messages = roomReducer.messages ? roomReducer.messages : [];
+    // const messages = [
+    //     {
+    //         messageID: 1,
+    //         userName: 'Filip Filipovic',
+    //         isCurrentUser: true,
+    //         content: 'Hello everyone!!!',
+    //         time: '10:43',
+    //     },
+    //     {
+    //         messageID: 2,
+    //         userName: 'Wes Bos',
+    //         isCurrentUser: false,
+    //         content: 'Hi',
+    //         time: '10:43',
+    //     },
+    //     {
+    //         messageID: 3,
+    //         userName: 'Aleksandar Tatic',
+    //         isCurrentUser: false,
+    //         content: 'Heey! Welcome!',
+    //         time: '10:43',
+    //     },
+    //     {
+    //         messageID: 4,
+    //         userName: 'Pera',
+    //         isCurrentUser: false,
+    //         content:
+    //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    //         time: '10:59',
+    //     },
+    //     {
+    //         messageID: 5,
+    //         userName: 'Fica',
+    //         isCurrentUser: true,
+    //         content:
+    //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    //         time: '10:59',
+    //     },
+    // ];
     return (
         <Wrapper>
             <MessagesSection>
                 {messages.map((message) => (
                     <Message
                         {...message}
+                        isCurrentUser={
+                            message.userID === currentUserReducer.socket.id
+                        }
                         key={message.messageID}
                         currentUserBackgroundColor='#3182ce'
                         otherUserBackgroundColor='#f9f9f9'
@@ -111,17 +123,30 @@ const Chat = () => {
             </MessagesSection>
             <InputAndButtonSection>
                 <InputBox
+                    inputText={roomReducer.messageContent}
                     inputWrapperWidth='70%'
                     inputBoxWidth='100%'
                     inputBoxHeight='40px'
                     inputPlaceHolder='Type Your Message'
                     textOverInput=''
-                    onChangeCallback={() => {}}
+                    onChangeCallback={(event) => {
+                        dispatch(
+                            roomReducerSetMessageContent(
+                                event.currentTarget.value
+                            )
+                        );
+                    }}
                 />
                 <JoinButton
                     buttonWidth='25%'
                     buttonHeight='40px'
-                    onClickCallback={() => {}}
+                    onClickCallback={() => {
+                        const content = roomReducer.messageContent;
+                        dispatch(roomReducerSetMessageContent(''));
+                        const socket = currentUserReducer.socket;
+                        const userID = socket.id;
+                        socket.emit('sendMessageToServer', { userID, content });
+                    }}
                 >
                     Send
                     <IconSpan>

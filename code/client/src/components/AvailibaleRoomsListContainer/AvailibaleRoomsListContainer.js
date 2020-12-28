@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import AvailibaleRoomsListElement from '../AvailibaleRoomsListElement/AvailibaleRoomsListElement';
 import styled from 'styled-components';
-import io from 'socket.io-client';
 
 const StyledContainer = styled(motion.div)`
     /* background: rgb(14, 75, 165); */
@@ -22,7 +21,7 @@ const variantsOfStyledContainer = {
 };
 
 const AvailibaleRoomsListContainer = () => {
-    const ENDPOINT = 'http://localhost:5000/';
+    const ENDPOINT = 'http://localhost:5000/rooms';
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
@@ -30,20 +29,23 @@ const AvailibaleRoomsListContainer = () => {
             .then((response) => response.json())
             .then((data) => {
                 setRooms(data);
+
                 console.log(data);
             })
             .catch((err) => {
-                throw new Error('Neuspesan zahtev');
+                throw new Error(
+                    'Greska AvailibaleRoomsListContainer useEffect'
+                );
             });
         return () => {};
     }, [ENDPOINT /* ???? */]);
     return (
         <StyledContainer variants={variantsOfStyledContainer}>
-            {rooms.map(({ roomName, host, roomID }) => (
+            {rooms.map(({ roomName, hostName, roomID }) => (
                 <AvailibaleRoomsListElement
                     roomID={roomID}
                     key={roomID}
-                    hostName={host}
+                    hostName={hostName}
                     roomName={roomName}
                 />
             ))}

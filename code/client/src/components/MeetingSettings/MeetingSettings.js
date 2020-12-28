@@ -10,7 +10,7 @@ import {
 } from 'react-icons/bs';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import StateButton from '../StateButton/StateButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     setHostName,
     setIsUserComingFromJoinPage,
@@ -91,7 +91,9 @@ const IconSpan = styled.span`
 
 const MeetingSettings = (props) => {
     const history = useHistory();
-    const { roomName, hostName, userName, setUserNameInputValue } = props;
+    const { roomName, hostName } = props;
+
+    const currentUser = useSelector((state) => state.currentUserReducer);
 
     const dispatch = useDispatch();
     return (
@@ -108,7 +110,12 @@ const MeetingSettings = (props) => {
                         textOverInput='Your Name'
                         textOverInputSize='.85em'
                         onChangeCallback={(event) => {
-                            setUserNameInputValue(event.currentTarget.value);
+                            dispatch(setUserName(event.currentTarget.value));
+                            if (currentUser.isCurrentUserHost) {
+                                dispatch(
+                                    setHostName(event.currentTarget.value)
+                                );
+                            }
                         }}
                     />
 
@@ -155,11 +162,23 @@ const MeetingSettings = (props) => {
                         buttonHeight='var(--buttons_and_input_height)'
                         onClickCallback={() => {
                             dispatch(setIsUserComingFromJoinPage(true));
-                            dispatch(setUserName(userName));
-                            dispatch(setHostName(hostName));
                             history.push({
-                                pathname: `/rooms/${'asd'}`,
+                                pathname: `/rooms/${currentUser.roomID}`,
                             });
+                            currentUser.socket.emit(
+                                'join',
+                                {
+                                    userName: currentUser.userName,
+                                    roomName: currentUser.roomName,
+                                    roomID: currentUser.roomID,
+                                    hostName: currentUser.hostName,
+                                    isCurrentUserHost:
+                                        currentUser.isCurrentUserHost,
+                                },
+                                ({ status }) => {
+                                    console.log(status);
+                                }
+                            );
                         }}
                     >
                         Join

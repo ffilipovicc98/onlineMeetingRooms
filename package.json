@@ -4,8 +4,8 @@
 	"description": "package json not in root",
 	"main": "index.js",
 	"scripts": {
-		"postinstall": "cd code/server/ && npm install",
-	  "start": "node code/server/index.js"
+		"postinstall": "cd code/server/ && npm install && cd ../../",
+	  "start": "cd code/server/ && node index.js && cd ../../"
 	  
 	},
 	"keywords": [],

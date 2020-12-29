@@ -4,7 +4,8 @@
 	"description": "package json not in root",
 	"main": "index.js",
 	"scripts": {
-		"postinstall": "cd code/server/ && npm install"
+		"heroku-prebuild": "cd code/server/ && npm install",
+		"start": "cd code/server/ && npm start"
 	
 	  
 	},

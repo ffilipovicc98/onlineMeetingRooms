@@ -1,20 +1,9 @@
 {
-	"name": "heroku hack",
-	"version": "1.0.0",
-	"description": "package json not in root",
-	"main": "index.js",
-	"scripts": {
+		"scripts": {
 		"heroku-prebuild": "cd code/server/ && npm install",
 		"start": "cd code/server/ && npm start"
 	
 	  
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-	},
-	"devDependencies": {
 	}
-  }
+}
   

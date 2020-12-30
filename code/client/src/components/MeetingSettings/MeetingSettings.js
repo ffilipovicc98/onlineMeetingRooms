@@ -111,12 +111,31 @@ const MeetingSettings = (props) => {
         if (!currentUser.isVideoEnabled) {
             return;
         }
+
         navigator.mediaDevices
-            .getUserMedia({
-                video: true,
-                audio: true,
+            .enumerateDevices()
+            .then((devices) => {
+                let options = { video: false, audio: false };
+                const hasAudioInput = devices.some(
+                    (device) => device.kind === 'audioinput'
+                );
+                const hasVideoInput = devices.some(
+                    (device) => device.kind === 'videoinput'
+                );
+                if (hasAudioInput && hasVideoInput) {
+                    options.video = true;
+                    options.audio = true;
+                } else if (hasAudioInput) {
+                    options.audio = true;
+                } else if (hasVideoInput) {
+                    options.video = true;
+                } else {
+                    // greska
+                }
+                return navigator.mediaDevices.getUserMedia(options);
             })
             .then((stream) => {
+                console.log(stream);
                 videoPreviewRef.current.srcObject = stream;
                 isStreamReady = true;
                 // video.addEventListener('loadedmetadata', () => {

@@ -137,7 +137,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log('useEffect');
+        console.log({ a: process.env.REACT_APP_API_URL });
         const socket = io(process.env.REACT_APP_API_URL);
 
         socket.on('roomInfoOnJoin', (room) => {

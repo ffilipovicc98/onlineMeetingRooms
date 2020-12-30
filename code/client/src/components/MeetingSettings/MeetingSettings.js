@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import InputBox from '../InputBox/InputBox';
@@ -15,6 +15,8 @@ import {
     setHostName,
     setIsUserComingFromJoinPage,
     setUserName,
+    toggleIsAudioEnabled,
+    toggleIsVideoEnabled,
 } from './../../actions';
 
 const Container = styled.div`
@@ -40,13 +42,19 @@ const Container = styled.div`
     box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
 `;
 
-const VideoPreview = styled.div`
+const VideoPreviewBox = styled.div`
     background-color: #444;
 
     width: var(--video_preview_width);
     height: var(--video_preview_height);
 
     box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.3);
+`;
+
+const VideoPreview = styled.video`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const SettingsRow = styled.div`
@@ -96,9 +104,41 @@ const MeetingSettings = (props) => {
     const currentUser = useSelector((state) => state.currentUserReducer);
 
     const dispatch = useDispatch();
+    const videoPreviewRef = useRef(null);
+    let isStreamReady = false;
+
+    useEffect(() => {
+        if (!currentUser.isVideoEnabled) {
+            return;
+        }
+        navigator.mediaDevices
+            .getUserMedia({
+                video: true,
+                audio: true,
+            })
+            .then((stream) => {
+                videoPreviewRef.current.srcObject = stream;
+                isStreamReady = true;
+                // video.addEventListener('loadedmetadata', () => {
+                //     video.play();
+                // });
+            })
+            .catch((error) => console.log('Camera not found.', error));
+        return () => {};
+    }, [currentUser.isVideoEnabled]);
+
     return (
         <Container>
-            <VideoPreview />
+            <VideoPreviewBox>
+                {currentUser.isVideoEnabled && (
+                    <VideoPreview
+                        ref={videoPreviewRef}
+                        onLoadedMetadata={() => {
+                            isStreamReady && videoPreviewRef.current.play();
+                        }}
+                    />
+                )}
+            </VideoPreviewBox>
             <SettingsRow>
                 <Settings>
                     <InputBox
@@ -120,6 +160,7 @@ const MeetingSettings = (props) => {
                     />
 
                     <StateButton
+                        isOn={currentUser.isAudioEnabled}
                         buttonWidth='100px'
                         buttonHeight='var(--buttons_and_input_height)'
                         onTextBackgroundColor='#42c408'
@@ -130,7 +171,9 @@ const MeetingSettings = (props) => {
                         borderTopRightRadius='3px'
                         borderBottomLeftRadius='3px'
                         borderBottomRightRadius='3px'
-                        onClickCallback={() => {}}
+                        onClickCallback={() => {
+                            dispatch(toggleIsAudioEnabled());
+                        }}
                         onText='Unmuted'
                         offText='Muted'
                         onIconCompoentGenerator={(props) => <BsFillMicFill />}
@@ -140,6 +183,7 @@ const MeetingSettings = (props) => {
                     />
 
                     <StateButton
+                        isOn={currentUser.isVideoEnabled}
                         buttonWidth='140px'
                         buttonHeight='var(--buttons_and_input_height)'
                         onTextBackgroundColor='#42c408'
@@ -150,7 +194,9 @@ const MeetingSettings = (props) => {
                         borderTopRightRadius='3px'
                         borderBottomLeftRadius='3px'
                         borderBottomRightRadius='3px'
-                        onClickCallback={() => {}}
+                        onClickCallback={() => {
+                            dispatch(toggleIsVideoEnabled());
+                        }}
                         onText='Video Enabled'
                         offText='Video Disabled'
                         onIconCompoentGenerator={(props) => <FaVideo />}

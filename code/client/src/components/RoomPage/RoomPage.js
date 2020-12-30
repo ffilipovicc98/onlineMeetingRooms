@@ -20,6 +20,8 @@ import {
     slideRightRoomPageOnExit,
     slideRightHomePageOnEnter,
     resetCurrentUser,
+    toggleIsVideoEnabled,
+    toggleIsAudioEnabled,
 } from './../../actions';
 import currentUserReducer from '../../reducers/currentUserReducer';
 
@@ -168,6 +170,7 @@ const RoomPage = () => {
                 <ButtonsSection>
                     <ButtonsBox>
                         <StateButton
+                            isOn={currentUser.isAudioEnabled}
                             buttonWidth='100px'
                             buttonHeight='40px'
                             onTextBackgroundColor='#42c408'
@@ -178,7 +181,9 @@ const RoomPage = () => {
                             borderTopRightRadius='3px'
                             borderBottomLeftRadius='3px'
                             borderBottomRightRadius='3px'
-                            onClickCallback={() => {}}
+                            onClickCallback={() => {
+                                dispatch(toggleIsAudioEnabled());
+                            }}
                             onText='Unmuted'
                             offText='Muted'
                             onIconCompoentGenerator={(props) => (
@@ -190,6 +195,7 @@ const RoomPage = () => {
                         />
 
                         <StateButton
+                            isOn={currentUser.isVideoEnabled}
                             buttonWidth='140px'
                             buttonHeight='40px'
                             onTextBackgroundColor='#42c408'
@@ -200,7 +206,9 @@ const RoomPage = () => {
                             borderTopRightRadius='3px'
                             borderBottomLeftRadius='3px'
                             borderBottomRightRadius='3px'
-                            onClickCallback={() => {}}
+                            onClickCallback={() => {
+                                dispatch(toggleIsVideoEnabled());
+                            }}
                             onText='Video Enabled'
                             offText='Video Disabled'
                             onIconCompoentGenerator={(props) => <FaVideo />}

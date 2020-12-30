@@ -90,6 +90,14 @@ export const setUserSocket = (value) => ({
     payload: value,
 });
 
+export const toggleIsVideoEnabled = (value) => ({
+    type: 'TOGGLE_IS_VIDEO_ENABLED',
+});
+
+export const toggleIsAudioEnabled = (value) => ({
+    type: 'TOGGLE_IS_AUDIO_ENABLED',
+});
+
 export const resetCurrentUser = () => ({
     type: 'RESET_CURRENT_USER',
 });

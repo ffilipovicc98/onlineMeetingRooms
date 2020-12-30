@@ -21,9 +21,10 @@ const IconSpan = styled.span`
 `;
 
 const StateButton = (props) => {
-    const [isOn, setIsOn] = useState(false);
-    const toggleSetIsOn = () => setIsOn((prevState) => !prevState);
+    // const [isOn, setIsOn] = useState(false);
+    // const toggleSetIsOn = () => setIsOn((prevState) => !prevState);
     const {
+        isOn,
         buttonWidth,
         buttonHeight,
         children,
@@ -67,7 +68,7 @@ const StateButton = (props) => {
                 borderBottomLeftRadius={borderBottomLeftRadius}
                 borderBottomRightRadius='0px'
                 onClickCallback={() => {
-                    toggleSetIsOn();
+                    // toggleSetIsOn();
                     onClickCallback();
                 }}
             >
@@ -82,7 +83,7 @@ const StateButton = (props) => {
                 borderBottomLeftRadius='0px'
                 borderBottomRightRadius={borderBottomRightRadius}
                 onClickCallback={() => {
-                    toggleSetIsOn();
+                    // toggleSetIsOn();
                     onClickCallback();
                 }}
             >

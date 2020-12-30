@@ -5,6 +5,8 @@ const initalState = {
     hostName: undefined,
     isCurrentUserHost: false,
     socket: undefined,
+    isVideoEnabled: true,
+    isAudioEnabled: true,
 };
 
 const currentUserReducer = (state = initalState, action) => {
@@ -21,6 +23,10 @@ const currentUserReducer = (state = initalState, action) => {
             return { ...state, isCurrentUserHost: action.payload };
         case 'SET_USER_SOCKET':
             return { ...state, socket: action.payload };
+        case 'TOGGLE_IS_VIDEO_ENABLED':
+            return { ...state, isVideoEnabled: !state.isVideoEnabled };
+        case 'TOGGLE_IS_AUDIO_ENABLED':
+            return { ...state, isAudioEnabled: !state.isAudioEnabled };
         case 'RESET_CURRENT_USER':
             return { ...initalState, socket: state.socket };
         default:

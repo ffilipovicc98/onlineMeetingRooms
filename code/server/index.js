@@ -238,10 +238,12 @@ io.on('connection', (socket) => {
     socket.on('sendMessageToServer', ({ userID, content }) => {
         if (appLogic.users.has(userID)) {
             const user = appLogic.users.get(userID);
-            const room = appLogic.rooms.get(user.roomID);
-            const message = new Message(userID, content);
-            room.messages.push(message);
-            io.in(room.roomID).emit('sendMessageToUsersInRoom', message);
+            if (appLogic.rooms.has(user.roomID)) {
+                const room = appLogic.rooms.get(user.roomID);
+                const message = new Message(userID, content);
+                room.messages.push(message);
+                io.in(room.roomID).emit('sendMessageToUsersInRoom', message);
+            }
         }
     });
 });

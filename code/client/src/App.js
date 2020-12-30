@@ -102,7 +102,7 @@ const shouldRedirectToJoinPage = (
     // debugger;
     if (shouldRedirectToJoinPage) {
         const roomID = pom[2];
-        fetch(`http://localhost:5000/rooms/${roomID}`)
+        fetch(`${process.env.REACT_APP_API_URL}/rooms/${roomID}`)
             .then((response) => response.json())
             .then(({ roomName, hostName }) => {
                 dispatch(setRoomName(roomName));
@@ -138,7 +138,7 @@ const App = () => {
 
     useEffect(() => {
         console.log('useEffect');
-        const socket = io('http://localhost:5000/');
+        const socket = io(process.env.REACT_APP_API_URL);
 
         socket.on('roomInfoOnJoin', (room) => {
             console.log(room);

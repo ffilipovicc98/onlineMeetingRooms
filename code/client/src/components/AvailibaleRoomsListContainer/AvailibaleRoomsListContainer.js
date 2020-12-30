@@ -21,7 +21,7 @@ const variantsOfStyledContainer = {
 };
 
 const AvailibaleRoomsListContainer = () => {
-    const ENDPOINT = 'http://localhost:5000/rooms';
+    const ENDPOINT = `${process.env.REACT_APP_API_URL}/rooms`;
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {

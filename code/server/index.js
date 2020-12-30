@@ -75,13 +75,21 @@ class App {
     }
 
     addRoom(roomID, roomName, hostName) {
-        this.rooms.set(roomID, new Room(roomID, roomName, hostName));
+        if (!this.rooms.has(roomID)) {
+            this.rooms.set(roomID, new Room(roomID, roomName, hostName));
+        } else {
+            console.log('Greska addRoom Vec postoji soba sa tim roomID-em.');
+        }
     }
 
     removeRoom(roomID) {
-        const room = this.rooms.get(roomID);
-        for (let [userID, user] of room.users) {
-            this.removeUser(userID);
+        if (this.rooms.has(roomID)) {
+            const room = this.rooms.get(roomID);
+            for (let [userID, user] of room.users) {
+                this.removeUser(userID);
+            }
+        } else {
+            console.log('Greska removeRoom Ne postoji soba sa tim roomID-em.');
         }
     }
 
@@ -97,21 +105,27 @@ class App {
         if (!this.rooms.has(roomID) && isCurrentUserHost) {
             this.addRoom(roomID, roomName, hostName);
         }
-        let status = 'addUser: Vec postoji korisnik sa datim ID-em';
+
         if (!this.users.has(userID)) {
             const user = new User(socket, roomID);
             user.setUserName(userName);
             user.setIsCurrentUserHost(isCurrentUserHost);
             user.socket.join(roomID);
             this.users.set(userID, user);
-            this.rooms.get(roomID).users.set(userID, user);
-            this.sendRoomDataToClient(socket, this.rooms.get(roomID));
-            if (!user.isCurrentUserHost) {
-                this.sendInfoAboutNewUserToOtherUsersInRoom(user);
+            if (this.rooms.has(roomID)) {
+                this.rooms.get(roomID).users.set(userID, user);
+                this.sendRoomDataToClient(socket, this.rooms.get(roomID));
+                if (!user.isCurrentUserHost) {
+                    this.sendInfoAboutNewUserToOtherUsersInRoom(user);
+                }
+            } else {
+                console.log('Greska addUser Ne postoji soba sa tim roomID-em.');
             }
-            status = 'ok';
+        } else {
+            console.log(
+                'Greska addUser Vec postoji korisnik sa tim userID-em.'
+            );
         }
-        return status;
     }
 
     sendRoomDataToClient(socket, room) {
@@ -137,23 +151,53 @@ class App {
     }
 
     removeUser(userID) {
-        const user = appLogic.users.get(userID);
-        let shouldRemoveRoom = false;
-        if (user.isCurrentUserHost) {
-            shouldRemoveRoom = true;
-        }
-        user.socket.leave(user.roomID);
-        this.rooms.get(user.roomID).users.delete(userID);
-        this.users.delete(userID);
-        if (shouldRemoveRoom) {
-            user.socket.to(user.roomID).emit('meetingEnded');
-            this.rooms.delete(user.roomID);
+        if (this.users.has(userID)) {
+            const user = this.users.get(userID);
+            let shouldRemoveRoom = false;
+            if (user.isCurrentUserHost) {
+                shouldRemoveRoom = true;
+            }
+            user.socket.leave(user.roomID);
+            if (this.rooms.has(user.roomID)) {
+                const usersInRoom = this.rooms.get(user.roomID).users;
+                if (usersInRoom.has(userID)) {
+                    usersInRoom.delete(userID);
+                } else {
+                    console.log(
+                        'Greska removeUser Ne mogu da obrisem korisnika sa tim ID-em jer nije dodeljen sobi sa tim ID-em.'
+                    );
+                }
+
+                const allUsersOnServer = this.users;
+                if (allUsersOnServer.has(userID)) {
+                    this.users.delete(userID);
+                } else {
+                    console.log(
+                        'Greska removeUser Ne mogu da obrisem korisnika sa tim ID-em jer ne postoji na serveru.'
+                    );
+                }
+
+                if (shouldRemoveRoom) {
+                    user.socket.to(user.roomID).emit('meetingEnded');
+                    if (this.rooms.has(user.roomID)) {
+                        this.rooms.delete(user.roomID);
+                    } else {
+                        console.log(
+                            'Greska removeUser Ne mogu da obrisem sobu sa tim ID-em jer ne postoji na serveru.'
+                        );
+                    }
+                } else {
+                    user.socket.to(user.roomID).emit('userLeft', {
+                        userName: user.userName,
+                        userID: user.userID,
+                        isHost: user.isCurrentUserHost,
+                    });
+                }
+            }
         } else {
-            user.socket.to(user.roomID).emit('userLeft', {
-                userName: user.userName,
-                userID: user.userID,
-                isHost: user.isCurrentUserHost,
-            });
+            console.log(
+                'Greska removeUser Ne postoji korisnik sa tim userID-em.'
+            );
         }
     }
 
@@ -176,10 +220,10 @@ class App {
 const appLogic = new App();
 
 io.on('connection', (socket) => {
-    console.log(`Imamo korisnika ${socket.id}`);
+    // console.log(`Imamo korisnika ${socket.id}`);
 
     socket.on('disconnect', () => {
-        console.log(`Ode jedan korisnik ${socket.id}`);
+        // console.log(`Ode jedan korisnik ${socket.id}`);
         appLogic.removeUser(socket.id);
     });
 
@@ -188,8 +232,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('join', (userData, callback) => {
-        const status = appLogic.addUser({ socket, ...userData });
-        callback({ status });
+        appLogic.addUser({ socket, ...userData });
     });
 
     socket.on('sendMessageToServer', ({ userID, content }) => {
@@ -203,9 +246,9 @@ io.on('connection', (socket) => {
     });
 });
 
-setInterval(() => {
-    console.log(appLogic);
-}, 5000);
+// setInterval(() => {
+//     console.log(appLogic);
+// }, 5000);
 
 // const rooms = [
 //     {
@@ -244,16 +287,16 @@ router.get('/rooms/:roomID', (req, res) => {
     }
 });
 
-router.post('/rooms', (req, res) => {
-    console.log('POST');
-    console.log(req.body);
-    const newUser = {
-        roomName: 'RM Odbrana projekta',
-        host: 'Filip Filipovic',
-        roomID: 5,
-    };
-    rooms.push(newUser);
-});
+// router.post('/rooms', (req, res) => {
+//     console.log('POST');
+//     console.log(req.body);
+//     const newUser = {
+//         roomName: 'RM Odbrana projekta',
+//         host: 'Filip Filipovic',
+//         roomID: 5,
+//     };
+//     rooms.push(newUser);
+// });
 
 app.use(router);
 

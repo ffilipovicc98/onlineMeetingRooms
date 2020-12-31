@@ -30,15 +30,20 @@ const Video = ({ user }) => {
     });
     const videoRef = useRef();
     useEffect(() => {
+        console.log(stream);
         videoRef.current.srcObject = stream;
+        videoRef.current.addEventListener('loadedmetadata', () => {
+            videoRef.current.play();
+        });
+
         return () => {};
     }, []);
     return (
         <StyledVideo
             ref={videoRef}
-            onLoadedMetadata={() => {
-                videoRef.current.play();
-            }}
+            // onLoadedMetadata={() => {
+            //     console.log('videoRef', videoRef);
+            // }}
         />
     );
 };

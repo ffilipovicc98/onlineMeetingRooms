@@ -22,7 +22,7 @@ const roomReducer = (state = initalState, action) => {
         case 'ROOM_REDUCER_REMOVE_USER':
             const users = state.users;
             const newUsers = users.filter(
-                (user) => user.userID != action.payload.userID
+                (user) => user.userID !== action.payload.userID
             );
             return { ...state, users: newUsers };
         case 'ROOM_REDUCER_SET_MESSAGES_ON_JOIN':
@@ -63,6 +63,14 @@ const roomReducer = (state = initalState, action) => {
                 }
                 return user;
             });
+            console.log(
+                '---------------ROOM_REDUCER_ADD_STREAM_OBJECT_TO_USER----------------'
+            );
+            console.log({ stateUsers: state.users });
+            console.log({ newUsersAddStream });
+            console.log(
+                '---------------ROOM_REDUCER_ADD_STREAM_OBJECT_TO_USER----------------'
+            );
             return { ...state, users: newUsersAddStream };
         case 'ROOM_REDUCER_RESET':
             return initalState;

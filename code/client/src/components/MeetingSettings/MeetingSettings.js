@@ -142,6 +142,24 @@ const MeetingSettings = (props) => {
             .then((stream) => {
                 dispatch(setStream(stream));
                 videoPreviewRef.current.srcObject = stream;
+
+                currentUser.peer.on('call', (call) => {
+                    console.log('currentUser.peer.on call', call);
+
+                    call.answer(stream);
+
+                    call.on('stream', (userVideoStream) => {
+                        console.log('call.on stream', {
+                            userVideoStream,
+                        });
+                        dispatch(
+                            roomReducerAddStreamObjectToUser(
+                                call.peer,
+                                userVideoStream
+                            )
+                        );
+                    });
+                });
             })
             .catch((error) =>
                 console.log(
@@ -273,11 +291,13 @@ const MeetingSettings = (props) => {
                                     );
 
                                     call.on('stream', (userVideoStream) => {
-                                        console.log({ userVideoStream });
+                                        console.log('call.on stream2', {
+                                            userVideoStream,
+                                        });
                                         dispatch(
                                             roomReducerAddStreamObjectToUser({
                                                 peerID,
-                                                userVideoStream,
+                                                stream: userVideoStream,
                                             })
                                         );
                                     });

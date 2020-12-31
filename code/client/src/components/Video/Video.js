@@ -17,6 +17,7 @@ const Video = ({
     peer,
     stream,
 }) => {
+    console.log('Video', stream);
     const videoRef = useRef();
     useEffect(() => {
         videoRef.current.srcObject = stream;

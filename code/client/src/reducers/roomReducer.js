@@ -51,7 +51,7 @@ const roomReducer = (state = initalState, action) => {
         case 'ROOM_REDUCER_ADD_PEER_OBJECT_TO_USER':
             const newUsersAddPeer = state.users.map((user) => {
                 if (user.peerID === action.payload.peerID) {
-                    user.peer = action.payload.peer;
+                    return { ...user, peer: action.payload.peer };
                 }
                 return user;
             });
@@ -59,7 +59,7 @@ const roomReducer = (state = initalState, action) => {
         case 'ROOM_REDUCER_ADD_STREAM_OBJECT_TO_USER':
             const newUsersAddStream = state.users.map((user) => {
                 if (user.peerID === action.payload.peerID) {
-                    user.stream = action.payload.stream;
+                    return { ...user, stream: action.payload.stream };
                 }
                 return user;
             });

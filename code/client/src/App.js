@@ -152,14 +152,6 @@ const App = () => {
 
         const socket = io(process.env.REACT_APP_API_URL);
 
-        socket.on('roomInfoOnJoin', (room) => {
-            dispatch(roomReducerSetRoomName(room.roomName));
-            dispatch(roomReducerSetRoomID(room.roomID));
-            dispatch(roomReducerSetHostName(room.hostName));
-            dispatch(roomReducerSetMessagesOnJoin(room.messages));
-            dispatch(roomReducerSetUsersOnJoin(room.users));
-        });
-
         socket.on('userLeft', (user) => {
             const { userName, userID, isHost } = user;
             dispatch(roomReducerRemoveUser(user));

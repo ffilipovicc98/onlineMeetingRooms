@@ -20,6 +20,12 @@ import {
     toggleIsVideoEnabled,
     roomReducerAddUser,
     roomReducerAddStreamObjectToUser,
+    roomReducerAddPeerObjectToUser,
+    roomReducerSetRoomName,
+    roomReducerSetRoomID,
+    roomReducerSetHostName,
+    roomReducerSetMessagesOnJoin,
+    roomReducerSetUsersOnJoin,
 } from './../../actions';
 import Peer from 'peerjs';
 
@@ -106,6 +112,7 @@ const MeetingSettings = (props) => {
     const { roomName, hostName } = props;
 
     const currentUser = useSelector((state) => state.currentUserReducer);
+    const roomReducer = useSelector((state) => state.roomReducer);
 
     const dispatch = useDispatch();
     const videoPreviewRef = useRef(null);
@@ -141,23 +148,19 @@ const MeetingSettings = (props) => {
             })
             .then((stream) => {
                 dispatch(setStream(stream));
+
                 videoPreviewRef.current.srcObject = stream;
 
                 currentUser.peer.on('call', (call) => {
-                    console.log('currentUser.peer.on call', call);
-
                     call.answer(stream);
-
-                    call.on('stream', (userVideoStream) => {
-                        console.log('call.on stream', {
-                            userVideoStream,
-                        });
+                    call.on('stream', (remoteUserStream) => {
                         dispatch(
-                            roomReducerAddStreamObjectToUser(
-                                call.peer,
-                                userVideoStream
-                            )
+                            roomReducerAddStreamObjectToUser({
+                                peerID: call.peer,
+                                stream: remoteUserStream,
+                            })
                         );
+                        console.log({ remoteUserStream });
                     });
                 });
             })
@@ -272,6 +275,38 @@ const MeetingSettings = (props) => {
                                 }
                             );
 
+                            currentUser.socket.on('roomInfoOnJoin', (room) => {
+                                dispatch(roomReducerSetRoomName(room.roomName));
+                                dispatch(roomReducerSetRoomID(room.roomID));
+                                dispatch(roomReducerSetHostName(room.hostName));
+                                dispatch(
+                                    roomReducerSetMessagesOnJoin(room.messages)
+                                );
+                                dispatch(roomReducerSetUsersOnJoin(room.users));
+                                console.log('spremam se za dispatch1');
+                                console.log({
+                                    peerID: currentUser.peerID,
+                                    peer: currentUser.peer,
+                                });
+                                dispatch(
+                                    roomReducerAddPeerObjectToUser({
+                                        peerID: currentUser.peerID,
+                                        peer: currentUser.peer,
+                                    })
+                                );
+                                console.log('spremam se za dispatch2');
+                                console.log({
+                                    peerID: currentUser.peerID,
+                                    stream: currentUser.stream,
+                                });
+                                dispatch(
+                                    roomReducerAddStreamObjectToUser({
+                                        peerID: currentUser.peerID,
+                                        stream: currentUser.stream,
+                                    })
+                                );
+                            });
+
                             currentUser.socket.on(
                                 'newUser',
                                 ({
@@ -301,9 +336,9 @@ const MeetingSettings = (props) => {
                                             })
                                         );
                                     });
-                                    call.on('close', () => {
-                                        // video.remove();
-                                    });
+                                    // call.on('close', () => {
+                                    //     // video.remove();
+                                    // });
 
                                     const userToStore = {
                                         userName,

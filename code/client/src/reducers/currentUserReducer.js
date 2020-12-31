@@ -7,6 +7,10 @@ const initalState = {
     socket: undefined,
     isVideoEnabled: true,
     isAudioEnabled: true,
+    mediaStream: undefined,
+    peer: undefined,
+    peerID: undefined,
+    stream: undefined,
 };
 
 const currentUserReducer = (state = initalState, action) => {
@@ -27,8 +31,14 @@ const currentUserReducer = (state = initalState, action) => {
             return { ...state, isVideoEnabled: !state.isVideoEnabled };
         case 'TOGGLE_IS_AUDIO_ENABLED':
             return { ...state, isAudioEnabled: !state.isAudioEnabled };
+        case 'SET_STREAM':
+            return { ...state, stream: action.payload };
+        case 'SET_PEER':
+            return { ...state, peer: action.payload };
+        case 'SET_PEER_ID':
+            return { ...state, peerID: action.payload };
         case 'RESET_CURRENT_USER':
-            return { ...initalState, socket: state.socket };
+            return { ...initalState, socket: state.socket, peer: state.peer };
         default:
             return state;
     }

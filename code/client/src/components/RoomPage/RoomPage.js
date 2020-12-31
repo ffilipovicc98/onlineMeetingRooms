@@ -130,6 +130,34 @@ const UserElementContainer = styled(motion.div)`
 
 const UserElementText = styled.p`
     padding-left: 10px;
+    flex-grow: 1;
+`;
+
+const UserElementIcons = styled.div`
+    /* background-color: #9af; */
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: flex-end;
+`;
+
+const UserElementIconSpan = styled.span`
+    /* background-color: ${(props) =>
+        props.isEnabled ? '#08af07' : '#e73a38'}; */
+    color: ${(props) => (props.isEnabled ? '#08af07' : '#e73a38')};
+    border: solid 1px ${(props) => (props.isEnabled ? '#08af07' : '#e73a38')};
+    border-radius: 50px;
+    padding: 7px;
+    margin: 0px 3px;
+    width: 30px;
+    height: 30px;
+
+    font-size: 0.9em;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const RoomPage = () => {
@@ -182,6 +210,10 @@ const RoomPage = () => {
                             borderBottomLeftRadius='3px'
                             borderBottomRightRadius='3px'
                             onClickCallback={() => {
+                                currentUser.socket.emit(
+                                    'audioSettingsChanged',
+                                    { value: !currentUser.isAudioEnabled }
+                                );
                                 dispatch(toggleIsAudioEnabled());
                             }}
                             onText='Unmuted'
@@ -207,6 +239,10 @@ const RoomPage = () => {
                             borderBottomLeftRadius='3px'
                             borderBottomRightRadius='3px'
                             onClickCallback={() => {
+                                currentUser.socket.emit(
+                                    'videoSettingsChanged',
+                                    { value: !currentUser.isVideoEnabled }
+                                );
                                 dispatch(toggleIsVideoEnabled());
                             }}
                             onText='Video Enabled'
@@ -260,6 +296,26 @@ const RoomPage = () => {
                         >
                             <CircleNameInitials name={user.userName} />
                             <UserElementText>{user.userName}</UserElementText>
+                            <UserElementIcons>
+                                <UserElementIconSpan
+                                    isEnabled={user.isAudioEnabled}
+                                >
+                                    {user.isAudioEnabled ? (
+                                        <BsFillMicFill />
+                                    ) : (
+                                        <BsFillMicMuteFill />
+                                    )}
+                                </UserElementIconSpan>
+                                <UserElementIconSpan
+                                    isEnabled={user.isVideoEnabled}
+                                >
+                                    {user.isVideoEnabled ? (
+                                        <FaVideo />
+                                    ) : (
+                                        <FaVideoSlash />
+                                    )}
+                                </UserElementIconSpan>
+                            </UserElementIcons>
                         </UserElementContainer>
                     ))}
                 </SectionWithBoxAndTextOver>

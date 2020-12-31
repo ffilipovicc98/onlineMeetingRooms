@@ -14,10 +14,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     setHostName,
     setIsUserComingFromJoinPage,
+    setStream,
     setUserName,
     toggleIsAudioEnabled,
     toggleIsVideoEnabled,
+    roomReducerAddUser,
+    roomReducerAddStreamObjectToUser,
 } from './../../actions';
+import Peer from 'peerjs';
 
 const Container = styled.div`
     --container_width: 1000px;
@@ -105,12 +109,13 @@ const MeetingSettings = (props) => {
 
     const dispatch = useDispatch();
     const videoPreviewRef = useRef(null);
-    let isStreamReady = false;
 
     useEffect(() => {
         if (!currentUser.isVideoEnabled) {
             return;
         }
+
+        videoPreviewRef.current.muted = true;
 
         navigator.mediaDevices
             .enumerateDevices()
@@ -135,16 +140,17 @@ const MeetingSettings = (props) => {
                 return navigator.mediaDevices.getUserMedia(options);
             })
             .then((stream) => {
-                console.log(stream);
+                dispatch(setStream(stream));
                 videoPreviewRef.current.srcObject = stream;
-                isStreamReady = true;
-                // video.addEventListener('loadedmetadata', () => {
-                //     video.play();
-                // });
             })
-            .catch((error) => console.log('Camera not found.', error));
+            .catch((error) =>
+                console.log(
+                    'User media (camera and/or microphone) not connected.',
+                    error
+                )
+            );
         return () => {};
-    }, [currentUser.isVideoEnabled]);
+    }, [currentUser.isVideoEnabled, currentUser.isAudioEnabled]);
 
     return (
         <Container>
@@ -153,7 +159,7 @@ const MeetingSettings = (props) => {
                     <VideoPreview
                         ref={videoPreviewRef}
                         onLoadedMetadata={() => {
-                            isStreamReady && videoPreviewRef.current.play();
+                            videoPreviewRef.current.play();
                         }}
                     />
                 )}
@@ -239,9 +245,64 @@ const MeetingSettings = (props) => {
                                     hostName: currentUser.hostName,
                                     isCurrentUserHost:
                                         currentUser.isCurrentUserHost,
+                                    peerID: currentUser.peerID,
+                                    isAudioEnabled: currentUser.isAudioEnabled,
+                                    isVideoEnabled: currentUser.isVideoEnabled,
                                 },
                                 ({ status }) => {
                                     console.log(status);
+                                }
+                            );
+
+                            currentUser.socket.on(
+                                'newUser',
+                                ({
+                                    userName,
+                                    userID,
+                                    isHost,
+                                    peerID,
+                                    isAudioEnabled,
+                                    isVideoEnabled,
+                                }) => {
+                                    console.log(`socket.on newUser: `, {
+                                        currentUser,
+                                    });
+                                    const call = currentUser.peer.call(
+                                        peerID,
+                                        currentUser.stream
+                                    );
+
+                                    call.on('stream', (userVideoStream) => {
+                                        console.log({ userVideoStream });
+                                        dispatch(
+                                            roomReducerAddStreamObjectToUser({
+                                                peerID,
+                                                userVideoStream,
+                                            })
+                                        );
+                                    });
+                                    call.on('close', () => {
+                                        // video.remove();
+                                    });
+
+                                    const userToStore = {
+                                        userName,
+                                        userID,
+                                        isHost,
+                                        peerID,
+                                        isAudioEnabled,
+                                        isVideoEnabled,
+                                        peer: call,
+                                        // videoRef: undefined,
+                                        stream: undefined,
+                                    };
+                                    // console.log({ userToStore });
+                                    dispatch(roomReducerAddUser(userToStore));
+
+                                    // peers[userId] = call; // menja red ispod
+                                    // dispatch(
+                                    //     roomReducerAddPeerObjectToUser({ peerID, peer: call })
+                                    // );
                                 }
                             );
                         }}

@@ -98,6 +98,21 @@ export const toggleIsAudioEnabled = (value) => ({
     type: 'TOGGLE_IS_AUDIO_ENABLED',
 });
 
+export const setStream = (value) => ({
+    type: 'SET_STREAM',
+    payload: value,
+});
+
+export const setPeer = (value) => ({
+    type: 'SET_PEER',
+    payload: value,
+});
+
+export const setPeerID = (value) => ({
+    type: 'SET_PEER_ID',
+    payload: value,
+});
+
 export const resetCurrentUser = () => ({
     type: 'RESET_CURRENT_USER',
 });
@@ -153,6 +168,26 @@ export const roomReducerAddMessage = (value) => ({
 
 export const roomReducerSetMessageContent = (value) => ({
     type: 'ROOM_REDUCER_SET_MESSAGE_CONTENT',
+    payload: value,
+});
+
+export const roomReducerOtherUserChangedAudioSettings = (value) => ({
+    type: 'ROOM_REDUCER_OTHER_USER_CHANGED_AUDIO_SETTINGS',
+    payload: value,
+});
+
+export const roomReducerOtherUserChangedVideoSettings = (value) => ({
+    type: 'ROOM_REDUCER_OTHER_USER_CHANGED_VIDEO_SETTINGS',
+    payload: value,
+});
+
+export const roomReducerAddPeerObjectToUser = (value) => ({
+    type: 'ROOM_REDUCER_ADD_PEER_OBJECT_TO_USER',
+    payload: value,
+});
+
+export const roomReducerAddStreamObjectToUser = (value) => ({
+    type: 'ROOM_REDUCER_ADD_STREAM_OBJECT_TO_USER',
     payload: value,
 });
 

@@ -23,12 +23,15 @@ app.use(bodyParser.json({ type: 'application/json' }));
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 class User {
-    constructor(socket, roomID) {
+    constructor(socket, roomID, peerID, isAudioEnabled, isVideoEnabled) {
         this.socket = socket;
         this.userID = socket.id;
         this.userName = undefined;
         this.roomID = roomID;
         this.isCurrentUserHost = undefined;
+        this.peerID = peerID;
+        this.isAudioEnabled = isAudioEnabled;
+        this.isVideoEnabled = isVideoEnabled;
     }
 
     setUserName(value) {
@@ -37,6 +40,14 @@ class User {
 
     setIsCurrentUserHost(value) {
         this.isCurrentUserHost = value;
+    }
+
+    setIsAudioEnabled(value) {
+        this.isAudioEnabled = value;
+    }
+
+    setIsVideoEnabled(value) {
+        this.isVideoEnabled = value;
     }
 }
 
@@ -100,6 +111,9 @@ class App {
         roomName,
         roomID,
         hostName,
+        peerID,
+        isAudioEnabled,
+        isVideoEnabled,
     }) {
         const userID = socket.id;
         if (!this.rooms.has(roomID) && isCurrentUserHost) {
@@ -107,7 +121,13 @@ class App {
         }
 
         if (!this.users.has(userID)) {
-            const user = new User(socket, roomID);
+            const user = new User(
+                socket,
+                roomID,
+                peerID,
+                isAudioEnabled,
+                isVideoEnabled
+            );
             user.setUserName(userName);
             user.setIsCurrentUserHost(isCurrentUserHost);
             user.socket.join(roomID);
@@ -137,6 +157,9 @@ class App {
                 userName: user.userName,
                 userID: user.userID,
                 isHost: user.isCurrentUserHost,
+                peerID: user.peerID,
+                isAudioEnabled: user.isAudioEnabled,
+                isVideoEnabled: user.isVideoEnabled,
             })),
             messages: room.messages,
         });
@@ -147,6 +170,9 @@ class App {
             userName: user.userName,
             userID: user.userID,
             isHost: user.isCurrentUserHost,
+            peerID: user.peerID,
+            isAudioEnabled: user.isAudioEnabled,
+            isVideoEnabled: user.isVideoEnabled,
         });
     }
 
@@ -245,6 +271,38 @@ io.on('connection', (socket) => {
                 io.in(room.roomID).emit('sendMessageToUsersInRoom', message);
             }
         }
+    });
+
+    socket.on('audioSettingsChanged', ({ value }) => {
+        if (!appLogic.users.has(socket.id)) {
+            return;
+        }
+        const user = appLogic.users.get(socket.id);
+        user.setIsAudioEnabled(value);
+        if (!appLogic.rooms.has(user.roomID)) {
+            return;
+        }
+        const room = appLogic.rooms.get(user.roomID);
+        io.in(user.roomID).emit('otherUserChangedAudioSettings', {
+            userID: user.userID,
+            isAudioEnabled: user.isAudioEnabled,
+        });
+    });
+
+    socket.on('videoSettingsChanged', ({ value }) => {
+        if (!appLogic.users.has(socket.id)) {
+            return;
+        }
+        const user = appLogic.users.get(socket.id);
+        user.setIsVideoEnabled(value);
+        if (!appLogic.rooms.has(user.roomID)) {
+            return;
+        }
+        const room = appLogic.rooms.get(user.roomID);
+        io.in(user.roomID).emit('otherUserChangedVideoSettings', {
+            userID: user.userID,
+            isVideoEnabled: user.isVideoEnabled,
+        });
     });
 });
 

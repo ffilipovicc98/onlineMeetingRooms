@@ -35,10 +35,17 @@ import {
     roomReducerAddUser,
     roomReducerRemoveUser,
     roomReducerAddMessage,
+    setPeer,
+    setPeerID,
+    roomReducerOtherUserChangedAudioSettings,
+    roomReducerOtherUserChangedVideoSettings,
+    roomReducerAddPeerObjectToUser,
+    roomReducerAddStreamObjectToUser,
 } from './actions';
 import { useSelector, useDispatch } from 'react-redux';
 import io from 'socket.io-client';
 import roomReducer from './reducers/roomReducer';
+import Peer from 'peerjs';
 
 const springType = {
     type: 'spring',
@@ -137,21 +144,20 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log({ a: process.env.REACT_APP_API_URL });
+        const peer = new Peer();
+        peer.on('open', (currentUserPeerID) => {
+            dispatch(setPeerID(currentUserPeerID));
+        });
+        dispatch(setPeer(peer));
+
         const socket = io(process.env.REACT_APP_API_URL);
 
         socket.on('roomInfoOnJoin', (room) => {
-            console.log(room);
             dispatch(roomReducerSetRoomName(room.roomName));
             dispatch(roomReducerSetRoomID(room.roomID));
             dispatch(roomReducerSetHostName(room.hostName));
             dispatch(roomReducerSetMessagesOnJoin(room.messages));
             dispatch(roomReducerSetUsersOnJoin(room.users));
-        });
-
-        socket.on('newUser', (user) => {
-            const { userName, userID, isHost } = user;
-            dispatch(roomReducerAddUser(user));
         });
 
         socket.on('userLeft', (user) => {
@@ -166,6 +172,30 @@ const App = () => {
         socket.on('sendMessageToUsersInRoom', (message) => {
             dispatch(roomReducerAddMessage(message));
         });
+
+        socket.on(
+            'otherUserChangedAudioSettings',
+            ({ userID, isAudioEnabled }) => {
+                dispatch(
+                    roomReducerOtherUserChangedAudioSettings({
+                        userID,
+                        isAudioEnabled,
+                    })
+                );
+            }
+        );
+
+        socket.on(
+            'otherUserChangedVideoSettings',
+            ({ userID, isVideoEnabled }) => {
+                dispatch(
+                    roomReducerOtherUserChangedVideoSettings({
+                        userID,
+                        isVideoEnabled,
+                    })
+                );
+            }
+        );
 
         dispatch(setUserSocket(socket));
 

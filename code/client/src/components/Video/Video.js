@@ -7,17 +7,27 @@ const StyledVideo = styled.video`
     object-fit: cover;
 `;
 
-const Video = ({
-    userName,
-    userID,
-    isHost,
-    peerID,
-    isAudioEnabled,
-    isVideoEnabled,
-    peer,
-    stream,
-}) => {
-    console.log('Video', stream);
+const Video = ({ user }) => {
+    const {
+        userName,
+        userID,
+        isHost,
+        peerID,
+        isAudioEnabled,
+        isVideoEnabled,
+        peer,
+        stream,
+    } = user;
+    console.log('Video', {
+        userName,
+        userID,
+        isHost,
+        peerID,
+        isAudioEnabled,
+        isVideoEnabled,
+        peer,
+        stream,
+    });
     const videoRef = useRef();
     useEffect(() => {
         videoRef.current.srcObject = stream;

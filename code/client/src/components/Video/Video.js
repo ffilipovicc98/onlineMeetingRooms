@@ -7,7 +7,7 @@ const StyledVideo = styled.video`
     object-fit: cover;
 `;
 
-const Video = ({ user }) => {
+const Video = ({ user, isCurrentUserVideo }) => {
     const {
         userName,
         userID,
@@ -17,7 +17,6 @@ const Video = ({ user }) => {
         isVideoEnabled,
         peer,
         stream,
-        isCurrentUserVideo,
     } = user;
     console.log('Video', {
         userName,
@@ -39,7 +38,7 @@ const Video = ({ user }) => {
         });
 
         return () => {};
-    }, [isAudioEnabled, isCurrentUserVideo]);
+    }, [isAudioEnabled, isCurrentUserVideo, stream, videoRef]);
     return (
         <StyledVideo
             ref={videoRef}

@@ -32,64 +32,77 @@ const VideoGrid = (props) => {
         initialsScalingFactor = 30;
         initialsFontScaling = 2.5;
     }
+
     return (
         <AspectRatioContainer>
             <AspectRatio_16_9_FIX>
-                {users.map((user) => (
-                    <StyledVideoBox
-                        key={user.userID}
-                        width={`${scalingFactor * 90}%`}
-                        height={`${scalingFactor * 90}%`}
-                        drag={true}
-                        dragConstraints={{
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                        }}
-                        dragElastic={0.5}
-                        initial={{ scale: 1 }}
-                        animate={{ scale: 1 }}
-                        whileTap={{ scale: 0.66 }}
-                    >
-                        {user.isVideoEnabled && user.stream ? (
-                            <Video
-                                user={user}
-                                isCurrentUserVideo={
-                                    user.userID === currentUserReducer.socket.id
-                                }
-                            />
-                        ) : (
-                            <CircleNameInitials
-                                name={user.userName}
-                                width={`${initialsScalingFactor}%`}
-                                height={`${(initialsScalingFactor * 16) / 9}%`}
-                                fontSize={`${initialsFontScaling}em`}
-                            />
-                        )}
-                        <StyledVideoBoxNameAndIcons>
-                            <StyledVideoBoxName>
-                                {user.userName}
-                            </StyledVideoBoxName>
-                            <StyledVideoBoxIcons>
-                                <IconSpan isEnabled={user.isAudioEnabled}>
-                                    {user.isAudioEnabled ? (
-                                        <BsFillMicFill />
-                                    ) : (
-                                        <BsFillMicMuteFill />
-                                    )}
-                                </IconSpan>
-                                <IconSpan isEnabled={user.isVideoEnabled}>
-                                    {user.isVideoEnabled ? (
-                                        <FaVideo />
-                                    ) : (
-                                        <FaVideoSlash />
-                                    )}
-                                </IconSpan>
-                            </StyledVideoBoxIcons>
-                        </StyledVideoBoxNameAndIcons>
-                    </StyledVideoBox>
-                ))}
+                {users.map((user) => {
+                    console.log({
+                        'user.userID': user.userID,
+                        'currentUserReducer.socket.id':
+                            currentUserReducer.socket.id,
+                        elsujednaki:
+                            user.userID === currentUserReducer.socket.id,
+                    });
+                    return (
+                        <StyledVideoBox
+                            key={user.userID}
+                            width={`${scalingFactor * 90}%`}
+                            height={`${scalingFactor * 90}%`}
+                            drag={true}
+                            dragConstraints={{
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                            }}
+                            dragElastic={0.5}
+                            initial={{ scale: 1 }}
+                            animate={{ scale: 1 }}
+                            whileTap={{ scale: 0.66 }}
+                        >
+                            {user.isVideoEnabled && user.stream ? (
+                                <Video
+                                    user={user}
+                                    isCurrentUserVideo={
+                                        user.userID ===
+                                        currentUserReducer.socket.id
+                                    }
+                                />
+                            ) : (
+                                <CircleNameInitials
+                                    name={user.userName}
+                                    width={`${initialsScalingFactor}%`}
+                                    height={`${
+                                        (initialsScalingFactor * 16) / 9
+                                    }%`}
+                                    fontSize={`${initialsFontScaling}em`}
+                                />
+                            )}
+                            <StyledVideoBoxNameAndIcons>
+                                <StyledVideoBoxName>
+                                    {user.userName}
+                                </StyledVideoBoxName>
+                                <StyledVideoBoxIcons>
+                                    <IconSpan isEnabled={user.isAudioEnabled}>
+                                        {user.isAudioEnabled ? (
+                                            <BsFillMicFill />
+                                        ) : (
+                                            <BsFillMicMuteFill />
+                                        )}
+                                    </IconSpan>
+                                    <IconSpan isEnabled={user.isVideoEnabled}>
+                                        {user.isVideoEnabled ? (
+                                            <FaVideo />
+                                        ) : (
+                                            <FaVideoSlash />
+                                        )}
+                                    </IconSpan>
+                                </StyledVideoBoxIcons>
+                            </StyledVideoBoxNameAndIcons>
+                        </StyledVideoBox>
+                    );
+                })}
             </AspectRatio_16_9_FIX>
         </AspectRatioContainer>
     );

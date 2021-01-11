@@ -2,11 +2,14 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { BsFillMicFill, BsFillMicMuteFill } from 'react-icons/bs';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import currentUserReducer from '../../reducers/currentUserReducer';
 import CircleNameInitials from '../CircleNameInitials/CircleNameInitials';
 import Video from '../Video/Video';
 
 const VideoGrid = (props) => {
+    const currentUserReducer = useSelector((state) => state.currentUserReducer);
     const { users } = props;
     let scalingFactor;
     let initialsScalingFactor;
@@ -50,7 +53,12 @@ const VideoGrid = (props) => {
                         whileTap={{ scale: 0.66 }}
                     >
                         {user.isVideoEnabled && user.stream ? (
-                            <Video user={user} />
+                            <Video
+                                user={user}
+                                isCurrentUserVideo={
+                                    user.userID === currentUserReducer.socket.id
+                                }
+                            />
                         ) : (
                             <CircleNameInitials
                                 name={user.userName}

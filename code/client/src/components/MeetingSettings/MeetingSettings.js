@@ -141,8 +141,6 @@ const MeetingSettings = (props) => {
                     options.audio = true;
                 } else if (hasVideoInput) {
                     options.video = true;
-                } else {
-                    // greska
                 }
                 return navigator.mediaDevices.getUserMedia(options);
             })

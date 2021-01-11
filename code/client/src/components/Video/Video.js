@@ -17,6 +17,7 @@ const Video = ({ user }) => {
         isVideoEnabled,
         peer,
         stream,
+        isCurrentUserVideo,
     } = user;
     console.log('Video', {
         userName,
@@ -32,12 +33,13 @@ const Video = ({ user }) => {
     useEffect(() => {
         console.log(stream);
         videoRef.current.srcObject = stream;
+        videoRef.current.muted = isCurrentUserVideo ? true : !isAudioEnabled;
         videoRef.current.addEventListener('loadedmetadata', () => {
             videoRef.current.play();
         });
 
         return () => {};
-    }, []);
+    }, [isAudioEnabled, isCurrentUserVideo]);
     return (
         <StyledVideo
             ref={videoRef}

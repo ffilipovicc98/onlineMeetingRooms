@@ -343,28 +343,3 @@ const ChatSection = styled.section`
 `;
 
 export default RoomPage;
-
-{
-    /* <button
-                className='myButton'
-                onClick={() =>
-                    history.push({
-                        pathname: '/',
-                        state: {
-                            roomName: undefined,
-                            hostName: undefined,
-                            userName: undefined,
-                            isUserHost: undefined,
-                            isUserSeeAnimationsOnHomePage:
-                                history.location.state
-                                    .isUserSeeAnimationsOnHomePage,
-                            isUserComingFromHomePage: false,
-                            isUserComingFromJoinPage: false,
-                            isUserComingFromRoomPage: true,
-                        },
-                    })
-                }
-            >
-                Nazad
-            </button> */
-}
